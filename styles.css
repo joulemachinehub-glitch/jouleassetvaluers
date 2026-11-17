@@ -8950,3 +8950,16 @@ button.captcha-refresh-btn:hover i,
 .top-bar i {
     color: #facc15 !important;
 }
+
+/* Remove Top Bar completely across all pages */
+.top-bar,
+.top-header-bar,
+.header-top,
+.top-bar-container {
+    display: none !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+}
