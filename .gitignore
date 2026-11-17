@@ -1,0 +1,10 @@
+node_modules/
+package-lock.json
+package.json
+*.zip
+*.tar.gz
+*.rar
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

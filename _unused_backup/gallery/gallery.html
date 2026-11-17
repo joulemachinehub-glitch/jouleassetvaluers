@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Cache-Control Meta Tags for Immediate Updates -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Auto-Version Enforcer & Instant Cache Buster -->
+    <script>
+        (function() {
+            var CURRENT_VER = '20260912_v61';
+            
+            // Check if URL has outdated version parameter and correct it
+            try {
+                var url = new URL(window.location.href);
+                var urlVer = url.searchParams.get('v');
+                if (urlVer && urlVer !== CURRENT_VER) {
+                    url.searchParams.set('v', CURRENT_VER);
+                    window.location.replace(url.toString());
+                    return;
+                }
+            } catch(e) {}
+
+            // Unregister any stale Service Workers that might cache old assets
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for (var i = 0; i < regs.length; i++) { regs[i].unregister(); }
+                }).catch(function(){});
+            }
+
+            // Clear old Cache Storage API caches
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    for (var i = 0; i < names.length; i++) { caches.delete(names[i]); }
+                }).catch(function(){});
+            }
+        })();
+    </script>
+    <title>Gallery - Joule Asset Valuers | Chartered Engineer in Chennai</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="View the work gallery of Joule Asset Valuers, Chartered Engineers in Chennai. Gallery showcases inspections of second-hand machines, plant valuations, and compliance certificates.">
+    <meta name="keywords" content="Chartered Engineer Gallery, Machinery Valuation Gallery, Customs Inspection Photos, Engineering Site Photos">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css?v=20260912_v61">    
+    <!-- Theme Initializer (Prevents theme flashing on load) -->
+    <script>
+        (function() {
+            const storedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', storedTheme);
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Main Navigation Bar -->
+        <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Joule Asset Valuers" style="height: 88px; width: auto; max-height: 92px; display: block;">
+            </a>
+            
+                        <div class="mobile-nav-actions">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link ">Home</a></li>
+                <li><a href="about.html" class="nav-link ">About Us</a></li>
+                <li><a href="services.html" class="nav-link ">Services</a></li>
+                <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+                <li><a href="blog.html" class="nav-link ">Blog</a></li>
+                <li><a href="contact.html" class="nav-link ">Contact Us</a></li>
+                <li class="nav-cta"><a href="contact.html" class="btn btn-accent">Request a Consultation <i class="fa-solid fa-arrow-right"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-subtitle">Study Gallery</span>
+                <h2 class="section-title">Field Inspection Gallery</h2>
+                <p class="section-desc">Explore visual case studies of mechanical components, customs inspections, and machinery damage audits for educational reference.</p>
+            </div>
+
+            <!-- Gallery Items Grid -->
+            <div class="gallery-grid">
+                <!-- Generated Gallery Items 1 to 55 -->
+                <div class="gallery-item reveal" data-category="valuations"><img src="1.jpeg" alt="Gallery Image 1" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="inspections"><img src="2.jpg" alt="Gallery Image 2" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="certifications"><img src="3.jpg" alt="Gallery Image 3" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="valuations"><img src="4.jpg" alt="Gallery Image 4" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="inspections"><img src="5.jpg" alt="Gallery Image 5" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="certifications"><img src="6.jpg" alt="Gallery Image 6" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="valuations"><img src="7.jpg" alt="Gallery Image 7" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="inspections"><img src="8.jpg" alt="Gallery Image 8" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="certifications"><img src="9.jpg" alt="Gallery Image 9" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="valuations"><img src="10.jpg" alt="Gallery Image 10" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="inspections"><img src="11.jpg" alt="Gallery Image 11" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="certifications"><img src="12.jpg" alt="Gallery Image 12" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="valuations"><img src="13.jpg" alt="Gallery Image 13" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="inspections"><img src="14.jpg" alt="Gallery Image 14" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="certifications"><img src="15.jpg" alt="Gallery Image 15" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="valuations"><img src="16.jpg" alt="Gallery Image 16" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="inspections"><img src="17.jpg" alt="Gallery Image 17" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="certifications"><img src="18.jpeg" alt="Gallery Image 18" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="valuations"><img src="19.jpg" alt="Gallery Image 19" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="inspections"><img src="20.jpg" alt="Gallery Image 20" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="certifications"><img src="21.jpg" alt="Gallery Image 21" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="valuations"><img src="22.jpg" alt="Gallery Image 22" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="inspections"><img src="23.jpeg" alt="Gallery Image 23" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="certifications"><img src="24.jpeg" alt="Gallery Image 24" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="valuations"><img src="25.jpeg" alt="Gallery Image 25" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="inspections"><img src="26.jpeg" alt="Gallery Image 26" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="certifications"><img src="27.jpeg" alt="Gallery Image 27" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="valuations"><img src="28.jpeg" alt="Gallery Image 28" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="inspections"><img src="29.jpeg" alt="Gallery Image 29" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="certifications"><img src="30.jpeg" alt="Gallery Image 30" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="valuations"><img src="31.png" alt="Gallery Image 31" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="inspections"><img src="32.png" alt="Gallery Image 32" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="certifications"><img src="33.jpeg" alt="Gallery Image 33" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="valuations"><img src="34.jpeg" alt="Gallery Image 34" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="inspections"><img src="35.jpeg" alt="Gallery Image 35" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="certifications"><img src="36.jpg" alt="Gallery Image 36" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="valuations"><img src="37.jpeg" alt="Gallery Image 37" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="inspections"><img src="38.jpeg" alt="Gallery Image 38" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="certifications"><img src="39.jpeg" alt="Gallery Image 39" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="valuations"><img src="40.jpeg" alt="Gallery Image 40" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="inspections"><img src="41.jpeg" alt="Gallery Image 41" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="certifications"><img src="42.jpeg" alt="Gallery Image 42" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="valuations"><img src="43.jpeg" alt="Gallery Image 43" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="inspections"><img src="44.jpeg" alt="Gallery Image 44" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="certifications"><img src="45.jpeg" alt="Gallery Image 45" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="valuations"><img src="46.jpeg" alt="Gallery Image 46" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="inspections"><img src="47.jpeg" alt="Gallery Image 47" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="certifications"><img src="48.jpeg" alt="Gallery Image 48" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="valuations"><img src="49.jpeg" alt="Gallery Image 49" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="inspections"><img src="50.jpeg" alt="Gallery Image 50" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="certifications"><img src="51.jpeg" alt="Gallery Image 51" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-3" data-category="valuations"><img src="52.jpeg" alt="Gallery Image 52" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal" data-category="inspections"><img src="53.jpeg" alt="Gallery Image 53" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-1" data-category="certifications"><img src="54.jpeg" alt="Gallery Image 54" loading="lazy" decoding="async"></div>
+                <div class="gallery-item reveal reveal-delay-2" data-category="valuations"><img src="55.jpeg" alt="Gallery Image 55" loading="lazy" decoding="async"></div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Lightbox Modal -->
+    <div class="lightbox-modal">
+        <div class="lightbox-content">
+            <button class="lightbox-close"><i class="fa-solid fa-xmark"></i></button>
+            <img src="" alt="Lightbox Zoomed View" class="lightbox-image">
+        </div>
+    </div>
+
+    <!-- Footer -->
+        <!-- 4-Column Redesigned Footer -->
+        <!-- 15. REDESIGNED 4-COLUMN FOOTER (ALL 14 SERVICES & SITEMAP / PRIVACY) -->
+        <!-- 15. REDESIGNED 4-COLUMN FOOTER (ALL 14 SERVICES & SITEMAP / PRIVACY) -->
+        <!-- 15. REDESIGNED 4-COLUMN FOOTER (ALL 14 SERVICES & SITEMAP / PRIVACY) -->
+        <footer class="footer-v2">
+        <div class="footer-video-wrapper">
+            <video class="footer-bg-video footer-bg-video-desktop" autoplay loop muted playsinline poster="footer-bg.jpg">
+                <source src="Cargo_ships_at_container_port_202609042159.mp4" type="video/mp4">
+            </video>
+            <video class="footer-bg-video footer-bg-video-mobile" autoplay loop muted playsinline poster="footer-mobile-bg.jpg">
+                <source src="Container_port_with_ships_202609042154.mp4" type="video/mp4">
+            </video>
+            <div class="footer-video-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="footer-v2-grid">
+                <!-- Column 1: Brand Details -->
+                <div>
+                    <h3 style="font-size: 1.4rem; color: #ffffff; font-weight: 700; margin-bottom: 8px;">JOULE <span style="color: var(--color-accent);">ASSET VALUERS</span></h3>
+                    <p style="font-size: 0.85rem; color: var(--color-accent); font-weight: 600; margin-bottom: 14px;">Chartered Engineer &amp; Asset Valuation Services</p>
+                    <p style="font-size: 0.88rem; color: #94a3b8; line-height: 1.6; margin-bottom: 20px;">
+                        Professional engineering inspection, machinery valuation, Customs certification, marine survey and technical documentation in Chennai and across Tamil Nadu.
+                    </p>
+                    <div class="top-social">
+                        <a href="#" class="top-social-link" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="top-social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Our Services -->
+                <div>
+                    <h4 class="footer-col-title">Our Services</h4>
+                    <ul class="footer-links-list" style="font-size: 0.85rem;">
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Customs Chartered Engineer</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> UCC / Disposal Cargo Cert.</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Used Machinery Survey &amp; Valuation</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Dredgers &amp; Vessel Survey</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Installation / Nexus Certificate</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> SEZ Certification</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Third-Party Damage Survey</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Technical Services -->
+                <div>
+                    <h4 class="footer-col-title">Technical Services</h4>
+                    <ul class="footer-links-list" style="font-size: 0.85rem;">
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> EPCG / Advance Auth Cert.</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Empty Container Inspection</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Factory Plants &amp; Stability Cert.</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Metal Scrap Radiation Testing</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> PAN Certification</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Insurance Survey</a></li>
+                        <li class="footer-link-item"><a href="services.html"><i class="fa-solid fa-chevron-right"></i> Functionality Certificate</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Office Location & Address -->
+                <div>
+                    <h4 class="footer-col-title">Office Location</h4>
+                    
+                    <div class="footer-address-highlight-box">
+                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px; color: var(--color-accent); font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-building"></i> Office Address
+                        </div>
+                        <p>Chennai: Phase 3, 2nd Floor, Spencer Plaza Mall, S101, Anna Salai, Chennai - 600002.</p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem;">
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <i class="fa-solid fa-phone" style="color: var(--color-primary-light);"></i>
+                            <a href="tel:+919442932849" style="color: #cbd5e1;">+91 9442932849</a>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <i class="fa-solid fa-envelope" style="color: var(--color-primary-light);"></i>
+                            <a href="mailto:sakthiceng@gmail.com" style="color: #cbd5e1;">sakthiceng@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom-bar">
+                <p>&copy; 2026 JOULE ASSET VALUERS. All Rights Reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="sitemap.html"><i class="fa-solid fa-sitemap"></i> HTML Sitemap</a>
+                    <span>|</span>
+                    <a href="privacy-policy.html"><i class="fa-solid fa-user-shield"></i> Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auto-fix broken image extensions -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const galleryImages = document.querySelectorAll(".gallery-item img");
+            galleryImages.forEach(img => {
+                img.addEventListener("error", function() {
+                    if (this.src.endsWith(".jpg")) {
+                        this.src = this.src.replace(".jpg", ".jpeg");
+                    } else if (this.src.endsWith(".jpeg")) {
+                        this.src = this.src.replace(".jpeg", ".png");
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Script File -->
+    <script src="script.js?v=20260912_v61"></script>
+    <!-- Floating Action Buttons: WhatsApp (Left), Call, Scroll Up, Scroll Down (Right) -->
+    <a href="https://wa.me/919442932849?text=Hello%20Joule%20Asset%20Valuers,%20I%20would%20like%20to%20inquire%20about%20your%20services." class="float-action-btn float-whatsapp" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <a href="tel:+919442932849" class="float-action-btn float-call" aria-label="Call Direct Line" title="Call Direct Line">
+        <i class="fa-solid fa-phone"></i>
+    </a>
+    <button id="scrollUpBtn" class="float-action-btn float-scroll-up" aria-label="Scroll to Top" title="Scroll to Top">
+        <i class="fa-solid fa-chevron-up"></i>
+    </button>
+    <button id="scrollDownBtn" class="float-action-btn float-scroll-down" aria-label="Scroll to Bottom" title="Scroll to Bottom">
+        <i class="fa-solid fa-chevron-down"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollUpBtn = document.getElementById('scrollUpBtn');
+            const scrollDownBtn = document.getElementById('scrollDownBtn');
+            
+            if (scrollUpBtn) {
+                scrollUpBtn.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            if (scrollDownBtn) {
+                scrollDownBtn.addEventListener('click', function() {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

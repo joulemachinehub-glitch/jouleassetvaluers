@@ -1,0 +1,22 @@
+# ==============================================================================
+# Robots.txt for Joule Asset Valuers (https://jouleassetvaluers.com)
+# Generated for optimal Google Search, Bing, and major search engine indexation
+# ==============================================================================
+
+User-agent: *
+Allow: /
+
+# Priority Search Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Disallow internal scripts, source assets, and build artifacts from crawl budget waste
+Disallow: /*.json$
+Disallow: /*.mp4$
+Disallow: /node_modules/
+
+# Canonical XML & HTML Sitemaps
+Sitemap: https://jouleassetvaluers.com/sitemap.xml
