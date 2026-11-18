@@ -4,7 +4,7 @@
 
 // 0. Static Version Constant (Zero auto-reloads to prevent infinite reload loops)
 (function() {
-    const CURRENT_VERSION = '20261118_v133';
+    const CURRENT_VERSION = '20261118_v134';
     try {
         localStorage.setItem('site_v', CURRENT_VERSION);
     } catch(e) {}
@@ -387,54 +387,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 const captchaErrorMsg = form.querySelector('.captcha-error-msg');
                 const submitBtn = form.querySelector('button[type="submit"]');
 
-                let isValid = true;
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                const phoneRegex = /^[0-9+\s\-()]{10,18}$/;
+                const validationErrors = [];
+                let firstInvalidElement = null;
 
-                if (!nameInput || nameInput.value.trim() === '') {
-                    isValid = false;
-                    if (nameInput) nameInput.style.borderColor = '#ef4444';
-                } else {
+                // 1. Full Name Validation
+                if (!nameInput || nameInput.value.trim().length < 2) {
+                    validationErrors.push('Please enter your full name (minimum 2 characters).');
+                    if (nameInput) {
+                        nameInput.style.borderColor = '#ef4444';
+                        if (!firstInvalidElement) firstInvalidElement = nameInput;
+                    }
+                } else if (nameInput) {
                     nameInput.style.borderColor = 'var(--color-border)';
                 }
 
-                if (!emailInput || !emailRegex.test(emailInput.value.trim())) {
-                    isValid = false;
-                    if (emailInput) emailInput.style.borderColor = '#ef4444';
-                } else {
-                    emailInput.style.borderColor = 'var(--color-border)';
-                }
-
-                if (!phoneInput || !phoneRegex.test(phoneInput.value.replace(/\s/g, ''))) {
-                    isValid = false;
-                    if (phoneInput) phoneInput.style.borderColor = '#ef4444';
-                } else {
+                // 2. Phone Number Validation (At least 7 digits, supports +91, spaces, hyphens)
+                const rawPhone = phoneInput ? phoneInput.value.trim() : '';
+                const cleanDigits = rawPhone.replace(/\D/g, '');
+                if (!phoneInput || cleanDigits.length < 7 || cleanDigits.length > 15) {
+                    validationErrors.push('Please enter a valid phone number (at least 7 to 10 digits).');
+                    if (phoneInput) {
+                        phoneInput.style.borderColor = '#ef4444';
+                        if (!firstInvalidElement) firstInvalidElement = phoneInput;
+                    }
+                } else if (phoneInput) {
                     phoneInput.style.borderColor = 'var(--color-border)';
                 }
 
-                if (!messageInput || messageInput.value.trim() === '') {
-                    isValid = false;
-                    if (messageInput) messageInput.style.borderColor = '#ef4444';
-                } else {
-                    messageInput.style.borderColor = 'var(--color-border)';
+                // 3. Email Address Validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailInput || !emailRegex.test(emailInput.value.trim())) {
+                    validationErrors.push('Please enter a valid email address (e.g. name@domain.com).');
+                    if (emailInput) {
+                        emailInput.style.borderColor = '#ef4444';
+                        if (!firstInvalidElement) firstInvalidElement = emailInput;
+                    }
+                } else if (emailInput) {
+                    emailInput.style.borderColor = 'var(--color-border)';
                 }
 
-                if (serviceInput && serviceInput.hasAttribute('required') && serviceInput.value.trim() === '') {
-                    isValid = false;
-                    serviceInput.style.borderColor = '#ef4444';
-                } else if (serviceInput) {
+                // 4. Service Selection (Auto-select first service if unselected)
+                if (serviceInput && (!serviceInput.value || serviceInput.value.trim() === '')) {
+                    if (serviceInput.tagName === 'SELECT') {
+                        // Automatically select the primary service so lead is never lost
+                        serviceInput.value = 'Chartered Engineer Service for Customs';
+                    }
+                }
+                if (serviceInput) {
                     serviceInput.style.borderColor = 'var(--color-border)';
                 }
 
-                // Verify Math Captcha
+                // 5. Message (Auto-fill default if user left it blank)
+                if (messageInput && messageInput.value.trim() === '') {
+                    const chosenSvc = (serviceInput && serviceInput.value) ? serviceInput.value : 'Chartered Engineer consultation';
+                    messageInput.value = 'Inquiry request for ' + chosenSvc + '.';
+                }
+                if (messageInput) {
+                    messageInput.style.borderColor = 'var(--color-border)';
+                }
+
+                // 6. Security Math Verification
                 const expectedSum = form.dataset.captchaSum;
                 const userSum = captchaAnswerInput ? captchaAnswerInput.value.trim() : '';
 
                 if (!userSum || userSum !== expectedSum) {
-                    isValid = false;
+                    validationErrors.push('Incorrect security math answer. Please enter the correct sum.');
                     if (captchaAnswerInput) {
                         captchaAnswerInput.style.borderColor = '#ef4444';
-                        captchaAnswerInput.focus();
+                        if (!firstInvalidElement) firstInvalidElement = captchaAnswerInput;
                     }
                     if (captchaErrorMsg) {
                         captchaErrorMsg.style.display = 'block';
@@ -444,7 +464,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (captchaErrorMsg) captchaErrorMsg.style.display = 'none';
                 }
 
-                // General Validation Check
+                // Input listeners to auto-clear red borders on typing
+                [nameInput, emailInput, phoneInput, serviceInput, messageInput, captchaAnswerInput].forEach(inp => {
+                    if (inp && !inp.dataset.clearBound) {
+                        inp.dataset.clearBound = 'true';
+                        const evtType = inp.tagName === 'SELECT' ? 'change' : 'input';
+                        inp.addEventListener(evtType, () => {
+                            inp.style.borderColor = 'var(--color-border)';
+                            const currentErr = form.querySelector('.form-response-msg.form-error');
+                            if (currentErr) currentErr.remove();
+                        });
+                    }
+                });
+
+                // Display Errors if any validation failed
                 const responseContainer = document.createElement('div');
                 responseContainer.className = 'form-response-msg';
                 responseContainer.style.marginTop = '20px';
@@ -453,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 responseContainer.style.fontWeight = '600';
                 responseContainer.style.fontSize = '0.95rem';
 
-                if (!isValid) {
+                if (validationErrors.length > 0) {
                     responseContainer.className = 'form-response-msg form-error';
                     responseContainer.style.setProperty('background-color', '#991b1b', 'important');
                     responseContainer.style.setProperty('color', '#ffffff', 'important');
@@ -461,16 +494,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     responseContainer.style.setProperty('padding', '14px 18px', 'important');
                     responseContainer.style.setProperty('border-radius', '8px', 'important');
                     responseContainer.style.setProperty('margin-top', '18px', 'important');
-                    responseContainer.style.setProperty('display', 'flex', 'important');
-                    responseContainer.style.setProperty('align-items', 'center', 'important');
-                    responseContainer.style.setProperty('gap', '12px', 'important');
-                    responseContainer.style.setProperty('font-size', '0.95rem', 'important');
-                    responseContainer.style.setProperty('font-weight', '600', 'important');
-                    responseContainer.style.setProperty('line-height', '1.5', 'important');
+                    responseContainer.style.setProperty('display', 'block', 'important');
                     responseContainer.style.setProperty('box-sizing', 'border-box', 'important');
                     responseContainer.style.setProperty('width', '100%', 'important');
-                    responseContainer.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="color: #fef08a !important; font-size: 1.3rem !important; flex-shrink: 0; margin-right: 4px;"></i> <span style="color: #ffffff !important; font-weight: 600; font-size: 0.95rem; line-height: 1.5;">Please fill in all required fields and solve the security math verification correctly.</span>';
+
+                    let errListHtml = '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">'
+                        + '<i class="fa-solid fa-circle-exclamation" style="color: #fef08a !important; font-size: 1.25rem;"></i>'
+                        + '<strong style="color: #ffffff !important; font-size: 0.95rem;">Please check the following:</strong></div>'
+                        + '<ul style="margin: 0; padding-left: 24px; color: #fee2e2; font-size: 0.9rem; line-height: 1.6;">';
+                    
+                    validationErrors.forEach(err => {
+                        errListHtml += '<li>' + err + '</li>';
+                    });
+                    errListHtml += '</ul>';
+
+                    responseContainer.innerHTML = errListHtml;
                     form.appendChild(responseContainer);
+
+                    if (firstInvalidElement) {
+                        firstInvalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        try { firstInvalidElement.focus(); } catch (e) {}
+                    }
                     return;
                 }
 
