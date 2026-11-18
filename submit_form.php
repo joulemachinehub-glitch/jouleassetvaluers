@@ -1,199 +1,174 @@
 <?php
-// submit_form.php - Handles All Inquiries Across the Website
-// Saves inquiry directly to MySQL database and sends notifications to official email addresses
+/**
+ * JOULE ASSET VALUERS - OFFICIAL CONTACT FORM PROCESSOR
+ * Saves inquiry directly to MySQL database and sends notifications to official email addresses
+ */
 
-// Enable CORS for same-origin and preflight requests
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+declare(strict_types=1);
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
+// Set response header to JSON for AJAX requests
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo "Method Not Allowed. Please use POST.";
-    exit;
-}
-
+// Load database configuration
 require_once __DIR__ . '/db_config.php';
 
-// Accept both JSON payload and regular application/x-www-form-urlencoded / multipart POST
-$rawInput = file_get_contents('php://input');
-$jsonData = json_decode($rawInput, true);
-$data = is_array($jsonData) ? $jsonData : $_POST;
+// Helper: Check if request is AJAX
+function isAjax(): bool {
+    return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+        || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
+}
 
-// Determine if the request originated from fetch/AJAX or native form POST
-$isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') 
-       || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
-       || (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false)
-       || is_array($jsonData);
+// Helper: JSON response
+function jsonResponse(bool $success, string $message, array $extra = []): void {
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode(array_merge(['success' => $success, 'message' => $message], $extra), JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
-$name        = trim($data['name'] ?? '');
-$email       = trim($data['email'] ?? '');
-$phone       = trim($data['phone'] ?? '');
-$location    = trim($data['location'] ?? ($data['address'] ?? ''));
-$service     = trim($data['service'] ?? 'General Consultation');
-$message     = trim($data['message'] ?? '');
-$pageSource  = trim($data['page_source'] ?? ($_SERVER['HTTP_REFERER'] ?? 'Website Form'));
-$ipAddress   = $_SERVER['REMOTE_ADDR'] ?? '';
-$userAgent   = substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255);
+// Only allow POST requests
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    if (isAjax()) {
+        jsonResponse(false, 'Invalid request method. Only POST is accepted.');
+    } else {
+        header('Location: contact.html');
+        exit;
+    }
+}
+
+// Collect raw POST data or JSON payload
+$data = $_POST;
+if (empty($data)) {
+    $rawInput = file_get_contents('php://input');
+    if (!empty($rawInput)) {
+        $jsonData = json_decode($rawInput, true);
+        if (is_array($jsonData)) {
+            $data = $jsonData;
+        }
+    }
+}
+
+// Sanitize and extract form inputs
+$name       = trim($data['name'] ?? '');
+$email      = trim($data['email'] ?? '');
+$phone      = trim($data['phone'] ?? '');
+$location   = trim($data['location'] ?? '');
+$service    = trim($data['service'] ?? '');
+$message    = trim($data['message'] ?? '');
+$pageSource = trim($data['page_source'] ?? $_SERVER['HTTP_REFERER'] ?? 'Website Direct');
+$ipAddress  = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
+$userAgent  = substr($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown', 0, 255);
 
 // Validation
 $errors = [];
 
-if (empty($name)) {
-    $errors[] = 'Full name is required.';
+if (empty($name) || mb_strlen($name) < 2) {
+    $errors[] = 'Please enter your full name.';
 }
 
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors[] = 'A valid email address is required.';
 }
 
-if (empty($phone)) {
-    $errors[] = 'Phone number is required.';
+if (empty($phone) || mb_strlen($phone) < 7) {
+    $errors[] = 'A valid phone number is required.';
 }
 
-if (empty($message)) {
-    $errors[] = 'Requirement details / message cannot be empty.';
+if (empty($service)) {
+    $errors[] = 'Please select a service from the dropdown.';
 }
 
-if (!empty($errors)) {
-    if ($isAjax) {
-        header('Content-Type: application/json; charset=UTF-8');
-        http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'message' => implode(' ', $errors),
-            'errors'  => $errors
-        ]);
-    } else {
-        echo "<script>alert('" . htmlspecialchars(implode('\n', $errors), ENT_QUOTES) . "'); window.history.back();</script>";
-    }
-    exit;
+if (empty($message) || mb_strlen($message) < 5) {
+    $errors[] = 'Please enter your requirement or message details.';
 }
 
-// ==========================================
-// 1. Math Captcha Verification
-// ==========================================
-$captchaAnswer = trim($data['captcha_answer'] ?? ($data['captcha_input'] ?? ''));
-$captchaHash   = trim($data['captcha_hash'] ?? ($data['captcha_expected'] ?? ''));
+// Anti-Spam Security: Math Captcha Verification
+$captchaAnswer = trim($data['captcha_answer'] ?? '');
+$captchaHash   = trim($data['captcha_hash'] ?? '');
 
 if (!empty($captchaHash)) {
-    $decodedExpected = base64_decode($captchaHash);
-    $expectedAnswer = explode('_salt_joule_', $decodedExpected)[0] ?? null;
+    $expectedHash = base64_encode(intval($captchaAnswer) . '_salt_joule_2026');
+    if ($captchaHash !== $expectedHash) {
+        $errors[] = 'Security math question answered incorrectly. Please try again.';
+    }
+}
 
-    if ($expectedAnswer === null || (string)$captchaAnswer !== (string)$expectedAnswer) {
-        if ($isAjax) {
-            header('Content-Type: application/json; charset=UTF-8');
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Security verification failed: Incorrect math answer. Please solve the calculation to submit.',
-                'errors'  => ['Security verification failed.']
-            ]);
-        } else {
-            echo "<script>alert('Security verification failed: Incorrect math answer.'); window.history.back();</script>";
-        }
+// Return validation errors if any
+if (!empty($errors)) {
+    if (isAjax()) {
+        jsonResponse(false, implode(' ', $errors));
+    } else {
+        $errorMsg = urlencode(implode(' ', $errors));
+        echo "<script>alert('" . addslashes(implode('\n', $errors)) . "'); window.history.back();</script>";
         exit;
     }
 }
 
-// ==========================================
-// 2. Comprehensive Anti-Spam & Marketing Filter
-// ==========================================
-// Block when used in unsolicited promotional messages.
-// DO NOT save to database and DO NOT send enquiry to email.
-$spamKeywords = [
-    'seo packages',
-    'seo package',
-    'seo services',
-    'seo service',
-    'seo solutions',
-    'improve your website\'s online visibility',
-    'improve your websites online visibility',
-    'improve your website online visibility',
-    'online visibility',
-    'digital marketing services',
-    'digital marketing service',
-    'digital marketing',
-    'marketing packages',
-    'marketing package',
-    'website promotion',
-    'link building',
-    'backlink services',
-    'backlink service',
-    'backlinks',
-    'backlink',
-    'guest posting',
-    'guest post',
-    'guest posts',
-    'ranking guarantee',
-    'guaranteed ranking',
-    'increase website traffic',
-    'website traffic',
-    'google indexing spam',
-    'search index',
-    'google search results',
-    'feature your website',
-    'searchregister.live',
-    'searchregister',
-    'submit your website today',
-    'submit your website',
-    'indexing service',
-    'indexing services',
-    'get indexed today',
-    'get indexed',
-    'seo and marketing spam',
-    'unsolicited promotional',
-    'rank on google',
-    'first page of google',
-    'boost your ranking',
-    'boost google ranking'
-];
-
-$combinedText = strtolower($name . ' ' . $email . ' ' . $phone . ' ' . $location . ' ' . $service . ' ' . $message . ' ' . $userAgent);
-
-$detectedSpam = null;
-foreach ($spamKeywords as $spamWord) {
-    if (stripos($combinedText, $spamWord) !== false) {
-        $detectedSpam = $spamWord;
-        break;
-    }
-}
-
-if ($detectedSpam !== null) {
-    // STRICTLY DO NOT SAVE TO DATABASE
-    // STRICTLY DO NOT SEND EMAIL
-    if ($isAjax) {
-        header('Content-Type: application/json; charset=UTF-8');
-        http_response_code(400);
-        echo json_encode([
-            'success'  => false,
-            'blocked'  => true,
-            'detected' => $detectedSpam,
-            'message'  => "Submission blocked: Promotional or SEO marketing keywords detected ('{$detectedSpam}'). Contact forms are strictly reserved for genuine engineering and valuation inquiries.",
-            'errors'   => ['Promotional spam content is prohibited.']
-        ]);
+// Honeypot spam check
+if (!empty($data['website_url_hp']) || !empty($data['fax_number'])) {
+    // Bot detected silently
+    if (isAjax()) {
+        jsonResponse(true, 'Your inquiry has been submitted successfully.');
     } else {
-        echo "<script>alert('Submission blocked: Promotional or SEO keywords detected. Contact forms are strictly reserved for engineering and valuation inquiries.'); window.history.back();</script>";
+        header('Location: thank-you.html');
+        exit;
     }
-    exit;
 }
 
-// Save to MySQL Database
-try {
-    $pdo = getDbConnection();
+// Spam keyword filter
+$spamKeywords = [
+    'viagra', 'cialis', 'casino', 'poker', 'crypto investment', 'whatsapp me on',
+    'buy followers', 'seo audit report for free', 'earn money fast', 'porn', 'xxx'
+];
+$combinedText = strtolower($name . ' ' . $email . ' ' . $phone . ' ' . $location . ' ' . $service . ' ' . $message . ' ' . $userAgent);
+foreach ($spamKeywords as $spamWord) {
+    if (strpos($combinedText, $spamWord) !== false) {
+        if (isAjax()) {
+            jsonResponse(true, 'Thank you! Your inquiry has been submitted.');
+        } else {
+            header('Location: thank-you.html');
+            exit;
+        }
+    }
+}
 
-    $stmt = $pdo->prepare("
-        INSERT INTO website_inquiries 
+try {
+    // 1. Establish PDO Connection
+    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
+    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+
+    // 2. Ensure inquiries table exists
+    $createTableSql = "
+        CREATE TABLE IF NOT EXISTS inquiries (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(150) NOT NULL,
+            email VARCHAR(150) NOT NULL,
+            phone VARCHAR(50) NOT NULL,
+            location VARCHAR(150) NULL,
+            service VARCHAR(150) NOT NULL,
+            message TEXT NOT NULL,
+            page_source VARCHAR(255) NULL,
+            ip_address VARCHAR(50) NULL,
+            user_agent VARCHAR(255) NULL,
+            status VARCHAR(50) DEFAULT 'New',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ";
+    $pdo->exec($createTableSql);
+
+    // 3. Insert inquiry into database
+    $insertSql = "
+        INSERT INTO inquiries 
         (name, email, phone, location, service, message, page_source, ip_address, user_agent)
         VALUES 
         (:name, :email, :phone, :location, :service, :message, :page_source, :ip_address, :user_agent)
-    ");
-
+    ";
+    $stmt = $pdo->prepare($insertSql);
     $stmt->execute([
         ':name'        => $name,
         ':email'       => $email,
@@ -203,14 +178,15 @@ try {
         ':message'     => $message,
         ':page_source' => $pageSource,
         ':ip_address'  => $ipAddress,
-        ':user_agent'  => $userAgent,
+        ':user_agent'  => $userAgent
     ]);
 
     $insertId = $pdo->lastInsertId();
 
-    // Send Notification Email to BOTH recipients
+    // 4. Send Notification Email to ALL three official recipients
     $recipients = [
         'info@jouleassetvaluers.com',
+        'jouleassetvaluers@gmail.com',
         'balamuruganp0405@gmail.com'
     ];
 
@@ -224,122 +200,231 @@ try {
     $safeSource = htmlspecialchars($pageSource, ENT_QUOTES, 'UTF-8');
     $safeMessage = nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
 
+    // Gorgeously Aligned, Mobile-Responsive HTML Email Template
     $htmlEmail = "
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset='UTF-8'>
-        <title>New Inquiry Notification</title>
-    </head>
-    <body style='font-family: Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 20px; color: #334155;'>
-        <div style='max-width: 620px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;'>
-            
-            <!-- Header -->
-            <div style='background-color: #0a192f; padding: 24px; text-align: center; border-bottom: 3px solid #0ea5e9;'>
-                <h1 style='color: #ffffff; margin: 0; font-size: 22px; letter-spacing: 0.5px;'>JOULE ASSET VALUERS</h1>
-                <p style='color: #38bdf8; margin: 6px 0 0; font-size: 13px; font-weight: bold; text-transform: uppercase;'>New Website Service Inquiry</p>
-            </div>
-
-            <!-- Body -->
-            <div style='padding: 24px;'>
-                <div style='background-color: #f8fafc; border-left: 4px solid #0ea5e9; padding: 12px 16px; margin-bottom: 20px;'>
-                    <p style='margin: 0; font-size: 14px; color: #64748b;'>
-                        Inquiry ID: <strong style='color: #0f172a;'>#{$insertId}</strong> | Received: <strong style='color: #0f172a;'>{$displayDate}</strong>
-                    </p>
-                </div>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>New Website Inquiry #{$insertId}</title>
+</head>
+<body style='margin: 0; padding: 0; background-color: #0b1329; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;'>
+    <table border='0' cellpadding='0' cellspacing='0' width='100%' style='table-layout: fixed; background-color: #0b1329; padding: 25px 10px;'>
+        <tr>
+            <td align='center'>
                 
-                <table style='width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 20px;'>
+                <!-- Main Container Box (620px) -->
+                <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 620px; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.35); border: 1px solid #1e293b;'>
+                    
+                    <!-- Header Banner -->
                     <tr>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #475569; width: 35%;'>Client Name:</td>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: 600;'>{$safeName}</td>
-                    </tr>
-                    <tr>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #475569;'>Phone Number:</td>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #0284c7; font-weight: bold;'>
-                            <a href='tel:{$phone}' style='color: #0284c7; text-decoration: none;'>{$safePhone}</a>
+                        <td style='background: linear-gradient(135deg, #071a3d 0%, #0d2857 100%); padding: 28px 24px; text-align: center; border-bottom: 4px solid #facc15;'>
+                            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                                <tr>
+                                    <td align='center'>
+                                        <h1 style='margin: 0; font-size: 24px; font-weight: 800; letter-spacing: 1px; color: #ffffff;'>
+                                            JOULE <span style='color: #facc15;'>ASSET VALUERS</span>
+                                        </h1>
+                                        <p style='margin: 6px 0 0; font-size: 13px; color: #cbd5e1; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;'>
+                                            Chartered Engineers &bull; Plant &bull; Machinery Valuers
+                                        </p>
+                                        <div style='margin-top: 14px; display: inline-block; background-color: rgba(250, 204, 21, 0.15); border: 1px solid #facc15; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #facc15;'>
+                                            &star; NEW WEBSITE INQUIRY RECEIVED &star;
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
+
+                    <!-- Status Info Pill -->
                     <tr>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #475569;'>Email Address:</td>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0;'>
-                            <a href='mailto:{$email}' style='color: #0284c7; text-decoration: none;'>{$safeEmail}</a>
+                        <td style='background-color: #f8fafc; padding: 14px 24px; border-bottom: 1px solid #e2e8f0;'>
+                            <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                                <tr>
+                                    <td style='font-size: 13px; color: #475569;'>
+                                        Inquiry Reference: <strong style='color: #071a3d; font-size: 14px;'>#{$insertId}</strong>
+                                    </td>
+                                    <td align='right' style='font-size: 13px; color: #64748b;'>
+                                        Received: <strong style='color: #0f172a;'>{$displayDate}</strong>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
+
+                    <!-- Client Details Table -->
                     <tr>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #475569;'>Requested Service:</td>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: 600;'>{$safeService}</td>
+                        <td style='padding: 24px;'>
+                            <table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse: separate; border-spacing: 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;'>
+                                
+                                <!-- Client Name -->
+                                <tr>
+                                    <td width='34%' style='padding: 12px 16px; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase;'>
+                                        Client Name
+                                    </td>
+                                    <td width='66%' style='padding: 12px 16px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; font-size: 15px; font-weight: 700; color: #071a3d;'>
+                                        {$safeName}
+                                    </td>
+                                </tr>
+
+                                <!-- Phone Number -->
+                                <tr>
+                                    <td style='padding: 12px 16px; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase;'>
+                                        Phone Number
+                                    </td>
+                                    <td style='padding: 12px 16px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; font-size: 15px; font-weight: 800; color: #071a3d;'>
+                                        <a href='tel:{$phone}' style='color: #0284c7; text-decoration: none;'>&#128222; {$safePhone}</a>
+                                    </td>
+                                </tr>
+
+                                <!-- Email Address -->
+                                <tr>
+                                    <td style='padding: 12px 16px; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase;'>
+                                        Email Address
+                                    </td>
+                                    <td style='padding: 12px 16px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; font-size: 14px; color: #071a3d;'>
+                                        <a href='mailto:{$email}' style='color: #0284c7; text-decoration: underline;'>&#9993; {$safeEmail}</a>
+                                    </td>
+                                </tr>
+
+                                <!-- Requested Service -->
+                                <tr>
+                                    <td style='padding: 12px 16px; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase;'>
+                                        Requested Service
+                                    </td>
+                                    <td style='padding: 12px 16px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; font-size: 14px;'>
+                                        <span style='display: inline-block; background-color: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; border: 1px solid #fde68a;'>
+                                            {$safeService}
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <!-- Location -->
+                                <tr>
+                                    <td style='padding: 12px 16px; background-color: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase;'>
+                                        Location / City
+                                    </td>
+                                    <td style='padding: 12px 16px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; font-size: 14px; font-weight: 600; color: #0f172a;'>
+                                        &#128205; {$safeLocation}
+                                    </td>
+                                </tr>
+
+                                <!-- Submitted From -->
+                                <tr>
+                                    <td style='padding: 12px 16px; background-color: #f8fafc; font-size: 13px; font-weight: 700; color: #475569; text-transform: uppercase;'>
+                                        Submitted From
+                                    </td>
+                                    <td style='padding: 12px 16px; background-color: #ffffff; font-size: 13px; color: #64748b;'>
+                                        {$safeSource}
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Message Section -->
+                            <div style='margin-top: 22px;'>
+                                <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                                    <tr>
+                                        <td>
+                                            <p style='margin: 0 0 8px; font-size: 13px; font-weight: 700; color: #071a3d; text-transform: uppercase;'>
+                                                Client Requirement / Message Details:
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style='background-color: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #facc15; border-radius: 6px; padding: 16px; font-size: 14px; line-height: 1.65; color: #1e293b;'>
+                                            {$safeMessage}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- Fast Action Buttons (Call / Email) -->
+                            <div style='margin-top: 26px; text-align: center;'>
+                                <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                                    <tr>
+                                        <td align='center'>
+                                            <table border='0' cellpadding='0' cellspacing='0'>
+                                                <tr>
+                                                    <td style='padding: 0 8px;'>
+                                                        <a href='tel:{$phone}' style='display: inline-block; background-color: #facc15; color: #000000; font-size: 14px; font-weight: 800; padding: 12px 24px; border-radius: 6px; text-decoration: none; box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);'>
+                                                            &#128222; Call Client Now
+                                                        </a>
+                                                    </td>
+                                                    <td style='padding: 0 8px;'>
+                                                        <a href='mailto:{$email}?subject=Regarding%20Your%20Inquiry%20-%20Joule%20Asset%20Valuers' style='display: inline-block; background-color: #071a3d; color: #ffffff; font-size: 14px; font-weight: 700; padding: 12px 24px; border-radius: 6px; text-decoration: none; border: 1px solid #facc15; box-shadow: 0 4px 12px rgba(7, 26, 61, 0.3);'>
+                                                            &#9993; Reply via Email
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </td>
                     </tr>
+
+                    <!-- Footer Details -->
                     <tr>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #475569;'>Location / City:</td>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #0f172a;'>{$safeLocation}</td>
-                    </tr>
-                    <tr>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #475569;'>Submitted From:</td>
-                        <td style='padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 13px;'>{$safeSource}</td>
+                        <td style='background-color: #f1f5f9; padding: 18px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; line-height: 1.6;'>
+                            <strong style='color: #071a3d;'>Joule Asset Valuers &bull; Official Inquiries Portal</strong><br />
+                            Recorded automatically into MySQL Database Table: <code>inquiries</code> (#{$insertId})<br />
+                            Sender IP: {$ipAddress} &bull; Timestamp: {$displayDate}
+                        </td>
                     </tr>
                 </table>
 
-                <div style='margin-bottom: 24px;'>
-                    <h4 style='margin: 0 0 8px; color: #0f172a; font-size: 14px;'>Requirement / Message Details:</h4>
-                    <div style='background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 14px; font-size: 14px; line-height: 1.6; color: #1e293b;'>
-                        {$safeMessage}
-                    </div>
-                </div>
-
-                <div style='text-align: center; margin-top: 24px;'>
-                    <a href='tel:{$phone}' style='display: inline-block; background-color: #0ea5e9; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-right: 10px;'>Call Client Now</a>
-                    <a href='mailto:{$email}' style='display: inline-block; background-color: #0a192f; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 14px;'>Reply via Email</a>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div style='background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0;'>
-                Saved automatically to MySQL database (Table: <code>website_inquiries</code>).<br>
-                IP Address: {$ipAddress} | Joule Asset Valuers Portal
-            </div>
-        </div>
-    </body>
-    </html>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
     ";
 
-    $mailHeaders  = "MIME-Version: 1.0\r\n";
-    $mailHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
-    $mailHeaders .= "From: Joule Asset Valuers <no-reply@jouleassetvaluers.com>\r\n";
-    $mailHeaders .= "Reply-To: {$safeName} <{$email}>\r\n";
+    $mailHeaders  = "MIME-Version: 1.0
+";
+    $mailHeaders .= "Content-Type: text/html; charset=UTF-8
+";
+    $mailHeaders .= "From: Joule Asset Valuers <no-reply@jouleassetvaluers.com>
+";
+    $mailHeaders .= "Reply-To: {$safeName} <{$email}>
+";
     $mailHeaders .= "X-Mailer: PHP/" . phpversion();
 
-    // Send email to both info@jouleassetvaluers.com and balamuruganp0405@gmail.com
+    // Send email to all three recipients
     foreach ($recipients as $recipient) {
         @mail($recipient, $subject, $htmlEmail, $mailHeaders);
     }
 
-    // Success response
-    if ($isAjax) {
-        header('Content-Type: application/json; charset=UTF-8');
-        echo json_encode([
-            'success'    => true,
-            'message'    => 'Thank you! Your inquiry has been submitted and saved successfully.',
-            'redirect'   => 'thank-you.html',
+    // 5. Respond with Success
+    if (isAjax()) {
+        jsonResponse(true, 'Thank you! Your inquiry has been submitted successfully. Our engineering team will contact you shortly.', [
             'inquiry_id' => $insertId
         ]);
     } else {
-        // Native Form POST redirect
-        header('Location: thank-you.html?status=success&id=' . $insertId);
+        header('Location: thank-you.html?status=success&id=' . urlencode((string)$insertId));
+        exit;
     }
-    exit;
 
-} catch (Exception $e) {
-    error_log("Database Insert Error: " . $e->getMessage());
+} catch (PDOException $e) {
+    error_log("Database Error in submit_form.php: " . $e->getMessage());
 
-    if ($isAjax) {
-        header('Content-Type: application/json; charset=UTF-8');
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Unable to save inquiry to database. Please check your network or contact us directly at +91 6374191927.'
-        ]);
+    if (isAjax()) {
+        jsonResponse(false, 'Unable to save inquiry. Please contact us directly at +91 6374191927 or info@jouleassetvaluers.com.');
     } else {
         echo "<script>alert('Unable to save inquiry. Please contact us directly at +91 6374191927 or info@jouleassetvaluers.com'); window.history.back();</script>";
+        exit;
     }
-    exit;
+} catch (Exception $e) {
+    error_log("General Error in submit_form.php: " . $e->getMessage());
+
+    if (isAjax()) {
+        jsonResponse(false, 'An unexpected error occurred. Please try again or call us at +91 6374191927.');
+    } else {
+        echo "<script>alert('An unexpected error occurred. Please contact us directly at +91 6374191927.'); window.history.back();</script>";
+        exit;
+    }
 }
