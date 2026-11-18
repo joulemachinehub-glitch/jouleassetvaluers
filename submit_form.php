@@ -192,8 +192,8 @@ $htmlEmail = "
                                         <p style='margin: 6px 0 0; font-size: 13px; color: #cbd5e1; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;'>
                                             Chartered Engineers &bull; Plant &bull; Machinery Valuers
                                         </p>
-                                        <div style='margin-top: 14px; display: inline-block; background-color: rgba(250, 204, 21, 0.15); border: 1px solid #facc15; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #facc15;'>
-                                            &star; NEW WEBSITE INQUIRY RECEIVED &star;
+                                        <div style='margin-top: 14px; display: inline-block; background-color: rgba(250, 204, 21, 0.15); border: 1px solid #facc15; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #facc15; letter-spacing: 0.5px;'>
+                                            OFFICIAL WEBSITE INQUIRY RECEIVED
                                         </div>
                                     </td>
                                 </tr>
@@ -346,15 +346,74 @@ $htmlEmail = "
 </html>
 ";
 
-$mailHeaders  = "MIME-Version: 1.0\r\n";
-$mailHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
-$mailHeaders .= "From: Joule Asset Valuers <no-reply@jouleassetvaluers.com>\r\n";
-$mailHeaders .= "Reply-To: {$safeName} <{$email}>\r\n";
-$mailHeaders .= "X-Mailer: PHP/" . phpversion();
+// High-Deliverability Plain-Text Version (Anti-Spam Requirement for SpamAssassin & Gmail)
+$plainTextEmail = "=====================================================\n"
+    . "JOULE ASSET VALUERS - NEW WEBSITE INQUIRY\n"
+    . "=====================================================\n"
+    . "Reference Code : {$refCode}\n"
+    . "Received On    : {$displayDate}\n\n"
+    . "CLIENT DETAILS:\n"
+    . "-----------------------------------------------------\n"
+    . "Client Name    : {$name}\n"
+    . "Phone Number   : {$phone}\n"
+    . "Email Address  : {$email}\n"
+    . "Requested Service: {$service}\n"
+    . "Location / City: " . (!empty($location) ? $location : 'Not specified') . "\n"
+    . "Submitted From : {$pageSource}\n\n"
+    . "REQUIREMENT / MESSAGE DETAILS:\n"
+    . "-----------------------------------------------------\n"
+    . "{$message}\n\n"
+    . "=====================================================\n"
+    . "Joule Asset Valuers • Registered Chartered Engineers & Valuers\n"
+    . "Address: Phase 3, 2nd Floor, Spencer Plaza Mall, S101, Anna Salai, Chennai - 600002\n"
+    . "Direct Line: +91 6374191927 | Email: info@jouleassetvaluers.com\n"
+    . "Website: https://jouleassetvaluers.com\n"
+    . "=====================================================\n";
 
-// Send email to all three recipients
+// Unique MIME Boundary
+$mimeBoundary = "==Multipart_Boundary_JAV_" . md5(uniqid((string)time(), true));
+
+// RFC 5322 & RFC 2822 Headers
+$rfcDate        = date('r');
+$cleanDomain    = 'jouleassetvaluers.com';
+$officialSender = 'info@jouleassetvaluers.com';
+$msgId          = '<JAV-' . date('YmdHis') . '-' . bin2hex(random_bytes(6)) . '@' . $cleanDomain . '>';
+$encodedSubject = "=?UTF-8?B?" . base64_encode($subject) . "?=";
+
+$mailHeaders  = "MIME-Version: 1.0\r\n";
+$mailHeaders .= "Date: {$rfcDate}\r\n";
+$mailHeaders .= "Message-ID: {$msgId}\r\n";
+$mailHeaders .= "From: Joule Asset Valuers <{$officialSender}>\r\n";
+$mailHeaders .= "Reply-To: {$safeName} <{$email}>\r\n";
+$mailHeaders .= "Return-Path: <{$officialSender}>\r\n";
+$mailHeaders .= "Organization: Joule Asset Valuers\r\n";
+$mailHeaders .= "X-Sender: {$officialSender}\r\n";
+$mailHeaders .= "X-Mailer: JouleAssetValuers Portal\r\n";
+$mailHeaders .= "X-Priority: 3 (Normal)\r\n";
+$mailHeaders .= "Importance: Normal\r\n";
+$mailHeaders .= "Auto-Submitted: auto-generated\r\n";
+$mailHeaders .= "X-Auto-Response-Suppress: All\r\n";
+$mailHeaders .= "Content-Type: multipart/alternative; boundary=\"{$mimeBoundary}\"\r\n";
+
+// Multipart/Alternative Body Assembly (Plain text first, HTML second)
+$fullEmailBody  = "--{$mimeBoundary}\r\n";
+$fullEmailBody .= "Content-Type: text/plain; charset=UTF-8\r\n";
+$fullEmailBody .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+$fullEmailBody .= $plainTextEmail . "\r\n\r\n";
+
+$fullEmailBody .= "--{$mimeBoundary}\r\n";
+$fullEmailBody .= "Content-Type: text/html; charset=UTF-8\r\n";
+$fullEmailBody .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+$fullEmailBody .= $htmlEmail . "\r\n\r\n";
+
+$fullEmailBody .= "--{$mimeBoundary}--\r\n";
+
+// Explicit Envelope Sender parameter (-f) guarantees SPF / DMARC domain alignment on Hostinger
+$envelopeSender = "-f" . $officialSender;
+
+// Send email to all three recipients with strict SPF alignment
 foreach ($recipients as $recipient) {
-    @mail($recipient, $subject, $htmlEmail, $mailHeaders);
+    @mail($recipient, $encodedSubject, $fullEmailBody, $mailHeaders, $envelopeSender);
 }
 
 // =========================================================================
