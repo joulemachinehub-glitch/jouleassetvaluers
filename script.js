@@ -4,7 +4,7 @@
 
 // 0. Static Version Constant (Zero auto-reloads to prevent infinite reload loops)
 (function() {
-    const CURRENT_VERSION = '20260912_v101';
+    const CURRENT_VERSION = '20261118_v133';
     try {
         localStorage.setItem('site_v', CURRENT_VERSION);
     } catch(e) {}
@@ -339,15 +339,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (errorMsg) errorMsg.style.display = 'none';
         };
 
-        generateProblem();
+        form._generateCaptcha = generateProblem;
+
+        if (answerInput && !answerInput.dataset.bound) {
+            answerInput.dataset.bound = 'true';
+            answerInput.addEventListener('input', () => {
+                if (errorMsg) errorMsg.style.display = 'none';
+                answerInput.style.borderColor = 'var(--color-border)';
+            });
+        }
 
         if (refreshBtn && !refreshBtn.dataset.bound) {
             refreshBtn.dataset.bound = 'true';
             refreshBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 generateProblem();
+                if (answerInput) answerInput.focus();
             });
         }
+
+        generateProblem();
     }
 
     // Attach to All Contact Forms
@@ -421,10 +432,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!userSum || userSum !== expectedSum) {
                     isValid = false;
-                    if (captchaAnswerInput) captchaAnswerInput.style.borderColor = '#ef4444';
-                    if (captchaErrorMsg) captchaErrorMsg.style.display = 'block';
-                    // Re-randomize captcha on failure
-                    setupFormMathCaptcha(form);
+                    if (captchaAnswerInput) {
+                        captchaAnswerInput.style.borderColor = '#ef4444';
+                        captchaAnswerInput.focus();
+                    }
+                    if (captchaErrorMsg) {
+                        captchaErrorMsg.style.display = 'block';
+                    }
                 } else {
                     if (captchaAnswerInput) captchaAnswerInput.style.borderColor = 'var(--color-border)';
                     if (captchaErrorMsg) captchaErrorMsg.style.display = 'none';
@@ -538,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Server also intercepted promotional / spam content
                         showSpamWarningModal(result.detected || 'Promotional Keywords');
                     } else {
-                        throw new Error((result && result.message) ? result.message : 'Server returned an error');
+                        throw new Error((result && result.message) ? result.message : 'Unable to submit inquiry at this moment. Please call or WhatsApp us at +91 6374191927.');
                     }
                 } catch (err) {
                     console.error('Submission error:', err);
@@ -557,8 +571,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     responseContainer.style.setProperty('line-height', '1.5', 'important');
                     responseContainer.style.setProperty('box-sizing', 'border-box', 'important');
                     responseContainer.style.setProperty('width', '100%', 'important');
-                    responseContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #fde047 !important; font-size: 1.3rem !important; flex-shrink: 0; margin-right: 4px;"></i> <span style="color: #ffffff !important; font-weight: 600; font-size: 0.95rem; line-height: 1.5;">' + (err.message || 'Unable to save to database directly. Please call or WhatsApp us at +91 6374191927.') + '</span>';
+                    responseContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #fde047 !important; font-size: 1.3rem !important; flex-shrink: 0; margin-right: 4px;"></i> <span style="color: #ffffff !important; font-weight: 600; font-size: 0.95rem; line-height: 1.5;">' + (err.message || 'Unable to submit inquiry. Please call or WhatsApp us at +91 6374191927.') + '</span>';
                     form.appendChild(responseContainer);
+                    if (form._generateCaptcha) {
+                        form._generateCaptcha();
+                    }
                 } finally {
                     if (submitBtn) {
                         submitBtn.disabled = false;

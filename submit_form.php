@@ -6,17 +6,27 @@
 
 declare(strict_types=1);
 
-// Set response header to JSON for AJAX requests
+// Set response headers
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 
 // Load database configuration
-require_once __DIR__ . '/db_config.php';
+if (file_exists(__DIR__ . '/db_config.php')) {
+    require_once __DIR__ . '/db_config.php';
+}
+
+if (!defined('DB_HOST'))    define('DB_HOST', 'localhost');
+if (!defined('DB_USER'))    define('DB_USER', 'u948237985_JSValuersOffl');
+if (!defined('DB_PASS'))    define('DB_PASS', 'Jouleassetvaluers$#2001');
+if (!defined('DB_NAME'))    define('DB_NAME', 'u948237985_JSValuersOffl');
+if (!defined('DB_PORT'))    define('DB_PORT', 3306);
+if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
 
 // Helper: Check if request is AJAX
 function isAjax(): bool {
     return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
-        || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
+        || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+        || (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false);
 }
 
 // Helper: JSON response
@@ -49,20 +59,20 @@ if (empty($data)) {
 }
 
 // Sanitize and extract form inputs
-$name       = trim($data['name'] ?? '');
-$email      = trim($data['email'] ?? '');
-$phone      = trim($data['phone'] ?? '');
-$location   = trim($data['location'] ?? '');
-$service    = trim($data['service'] ?? '');
-$message    = trim($data['message'] ?? '');
-$pageSource = trim($data['page_source'] ?? $_SERVER['HTTP_REFERER'] ?? 'Website Direct');
+$name       = trim((string)($data['name'] ?? ''));
+$email      = trim((string)($data['email'] ?? ''));
+$phone      = trim((string)($data['phone'] ?? ''));
+$location   = trim((string)($data['location'] ?? $data['address'] ?? ''));
+$service    = trim((string)($data['service'] ?? 'Chartered Engineer & Asset Valuation Consultation'));
+$message    = trim((string)($data['message'] ?? ''));
+$pageSource = trim((string)($data['page_source'] ?? $_SERVER['HTTP_REFERER'] ?? 'Website Direct'));
 $ipAddress  = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
 $userAgent  = substr($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown', 0, 255);
 
 // Validation
 $errors = [];
 
-if (empty($name) || mb_strlen($name) < 2) {
+if (empty($name) || strlen($name) < 2) {
     $errors[] = 'Please enter your full name.';
 }
 
@@ -70,26 +80,26 @@ if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors[] = 'A valid email address is required.';
 }
 
-if (empty($phone) || mb_strlen($phone) < 7) {
+if (empty($phone) || strlen($phone) < 7) {
     $errors[] = 'A valid phone number is required.';
 }
 
 if (empty($service)) {
-    $errors[] = 'Please select a service from the dropdown.';
+    $service = 'Chartered Engineer & Asset Valuation Consultation';
 }
 
-if (empty($message) || mb_strlen($message) < 5) {
-    $errors[] = 'Please enter your requirement or message details.';
+if (empty($message)) {
+    $message = 'Inquiry request submitted via website contact form.';
 }
 
 // Anti-Spam Security: Math Captcha Verification
-$captchaAnswer = trim($data['captcha_answer'] ?? '');
-$captchaHash   = trim($data['captcha_hash'] ?? '');
+$captchaAnswer = trim((string)($data['captcha_answer'] ?? ''));
+$captchaHash   = trim((string)($data['captcha_hash'] ?? ''));
 
-if (!empty($captchaHash)) {
+if (!empty($captchaHash) && $captchaAnswer !== '') {
     $expectedHash = base64_encode(intval($captchaAnswer) . '_salt_joule_2026');
     if ($captchaHash !== $expectedHash) {
-        $errors[] = 'Security math question answered incorrectly. Please try again.';
+        $errors[] = 'Security math question answered incorrectly. Please enter the correct sum.';
     }
 }
 
@@ -98,7 +108,6 @@ if (!empty($errors)) {
     if (isAjax()) {
         jsonResponse(false, implode(' ', $errors));
     } else {
-        $errorMsg = urlencode(implode(' ', $errors));
         echo "<script>alert('" . addslashes(implode('\n', $errors)) . "'); window.history.back();</script>";
         exit;
     }
@@ -106,9 +115,8 @@ if (!empty($errors)) {
 
 // Honeypot spam check
 if (!empty($data['website_url_hp']) || !empty($data['fax_number'])) {
-    // Bot detected silently
     if (isAjax()) {
-        jsonResponse(true, 'Your inquiry has been submitted successfully.');
+        jsonResponse(true, 'Your inquiry has been submitted successfully.', ['redirect' => 'thank-you.html']);
     } else {
         header('Location: thank-you.html');
         exit;
@@ -118,13 +126,14 @@ if (!empty($data['website_url_hp']) || !empty($data['fax_number'])) {
 // Spam keyword filter
 $spamKeywords = [
     'viagra', 'cialis', 'casino', 'poker', 'crypto investment', 'whatsapp me on',
-    'buy followers', 'seo audit report for free', 'earn money fast', 'porn', 'xxx'
+    'buy followers', 'seo audit report for free', 'earn money fast', 'porn', 'xxx',
+    'ranking guarantee', 'guaranteed ranking', 'backlink service'
 ];
 $combinedText = strtolower($name . ' ' . $email . ' ' . $phone . ' ' . $location . ' ' . $service . ' ' . $message . ' ' . $userAgent);
 foreach ($spamKeywords as $spamWord) {
     if (strpos($combinedText, $spamWord) !== false) {
         if (isAjax()) {
-            jsonResponse(true, 'Thank you! Your inquiry has been submitted.');
+            jsonResponse(true, 'Thank you! Your inquiry has been submitted.', ['redirect' => 'thank-you.html']);
         } else {
             header('Location: thank-you.html');
             exit;
@@ -132,84 +141,38 @@ foreach ($spamKeywords as $spamWord) {
     }
 }
 
-try {
-    // 1. Establish PDO Connection
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+// Generate Reference Code
+$refCode     = 'JAV-' . date('ymd') . '-' . rand(1000, 9999);
+$displayDate = date('d M Y, h:i A') . ' IST';
+$safeName    = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+$safeEmail   = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+$safePhone   = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
+$safeLocation = htmlspecialchars(!empty($location) ? $location : 'Not specified', ENT_QUOTES, 'UTF-8');
+$safeService = htmlspecialchars($service, ENT_QUOTES, 'UTF-8');
+$safeSource  = htmlspecialchars($pageSource, ENT_QUOTES, 'UTF-8');
+$safeMessage = nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
 
-    // 2. Ensure inquiries table exists
-    $createTableSql = "
-        CREATE TABLE IF NOT EXISTS inquiries (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(150) NOT NULL,
-            email VARCHAR(150) NOT NULL,
-            phone VARCHAR(50) NOT NULL,
-            location VARCHAR(150) NULL,
-            service VARCHAR(150) NOT NULL,
-            message TEXT NOT NULL,
-            page_source VARCHAR(255) NULL,
-            ip_address VARCHAR(50) NULL,
-            user_agent VARCHAR(255) NULL,
-            status VARCHAR(50) DEFAULT 'New',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    ";
-    $pdo->exec($createTableSql);
+// =========================================================================
+// 1. Send Notification Emails to ALL THREE official recipients IMMEDIATELY
+// =========================================================================
+$recipients = [
+    'info@jouleassetvaluers.com',
+    'jouleassetvaluers@gmail.com',
+    'balamuruganp0405@gmail.com'
+];
 
-    // 3. Insert inquiry into database
-    $insertSql = "
-        INSERT INTO inquiries 
-        (name, email, phone, location, service, message, page_source, ip_address, user_agent)
-        VALUES 
-        (:name, :email, :phone, :location, :service, :message, :page_source, :ip_address, :user_agent)
-    ";
-    $stmt = $pdo->prepare($insertSql);
-    $stmt->execute([
-        ':name'        => $name,
-        ':email'       => $email,
-        ':phone'       => $phone,
-        ':location'    => $location,
-        ':service'     => $service,
-        ':message'     => $message,
-        ':page_source' => $pageSource,
-        ':ip_address'  => $ipAddress,
-        ':user_agent'  => $userAgent
-    ]);
+$subject = "New Inquiry: {$service} - {$name} [{$refCode}]";
 
-    $insertId = $pdo->lastInsertId();
-
-    // 4. Send Notification Email to ALL three official recipients
-    $recipients = [
-        'info@jouleassetvaluers.com',
-        'jouleassetvaluers@gmail.com',
-        'balamuruganp0405@gmail.com'
-    ];
-
-    $subject = "New Inquiry #{$insertId}: {$service} - {$name}";
-    $displayDate = date('d M Y, h:i A') . ' IST';
-    $safeName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-    $safeEmail = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
-    $safePhone = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
-    $safeLocation = htmlspecialchars(!empty($location) ? $location : 'Not specified', ENT_QUOTES, 'UTF-8');
-    $safeService = htmlspecialchars($service, ENT_QUOTES, 'UTF-8');
-    $safeSource = htmlspecialchars($pageSource, ENT_QUOTES, 'UTF-8');
-    $safeMessage = nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
-
-    // Gorgeously Aligned, Mobile-Responsive HTML Email Template
-    $htmlEmail = "
+// Gorgeously Aligned, Mobile-Responsive HTML Email Template
+$htmlEmail = "
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-    <title>New Website Inquiry #{$insertId}</title>
+    <title>New Website Inquiry {$refCode}</title>
 </head>
-<body style='margin: 0; padding: 0; background-color: #0b1329; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;'>
+<body style='margin: 0; padding: 0; background-color: #0b1329; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;'>
     <table border='0' cellpadding='0' cellspacing='0' width='100%' style='table-layout: fixed; background-color: #0b1329; padding: 25px 10px;'>
         <tr>
             <td align='center'>
@@ -244,7 +207,7 @@ try {
                             <table border='0' cellpadding='0' cellspacing='0' width='100%'>
                                 <tr>
                                     <td style='font-size: 13px; color: #475569;'>
-                                        Inquiry Reference: <strong style='color: #071a3d; font-size: 14px;'>#{$insertId}</strong>
+                                        Inquiry Reference: <strong style='color: #071a3d; font-size: 14px;'>{$refCode}</strong>
                                     </td>
                                     <td align='right' style='font-size: 13px; color: #64748b;'>
                                         Received: <strong style='color: #0f172a;'>{$displayDate}</strong>
@@ -371,8 +334,7 @@ try {
                     <tr>
                         <td style='background-color: #f1f5f9; padding: 18px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; line-height: 1.6;'>
                             <strong style='color: #071a3d;'>Joule Asset Valuers &bull; Official Inquiries Portal</strong><br />
-                            Recorded automatically into MySQL Database Table: <code>inquiries</code> (#{$insertId})<br />
-                            Sender IP: {$ipAddress} &bull; Timestamp: {$displayDate}
+                            Reference: <code>{$refCode}</code> &bull; Sender IP: {$ipAddress} &bull; Timestamp: {$displayDate}
                         </td>
                     </tr>
                 </table>
@@ -382,49 +344,95 @@ try {
     </table>
 </body>
 </html>
+";
+
+$mailHeaders  = "MIME-Version: 1.0\r\n";
+$mailHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
+$mailHeaders .= "From: Joule Asset Valuers <no-reply@jouleassetvaluers.com>\r\n";
+$mailHeaders .= "Reply-To: {$safeName} <{$email}>\r\n";
+$mailHeaders .= "X-Mailer: PHP/" . phpversion();
+
+// Send email to all three recipients
+foreach ($recipients as $recipient) {
+    @mail($recipient, $subject, $htmlEmail, $mailHeaders);
+}
+
+// =========================================================================
+// 2. Database Storage (Safe & Non-blocking)
+// =========================================================================
+$insertId = 0;
+$dbSaved  = false;
+
+try {
+    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET . ";port=" . DB_PORT;
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+        PDO::ATTR_TIMEOUT            => 5,
+    ];
+    if (defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
+        $options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES utf8mb4";
+    }
+    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+
+    // Ensure inquiries table exists
+    $createTableSql = "
+        CREATE TABLE IF NOT EXISTS inquiries (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(150) NOT NULL,
+            email VARCHAR(191) NOT NULL,
+            phone VARCHAR(50) NOT NULL,
+            location VARCHAR(150) DEFAULT NULL,
+            service VARCHAR(191) NOT NULL,
+            message TEXT NOT NULL,
+            page_source VARCHAR(255) DEFAULT NULL,
+            ip_address VARCHAR(45) DEFAULT NULL,
+            user_agent VARCHAR(255) DEFAULT NULL,
+            status VARCHAR(50) DEFAULT 'New',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     ";
+    $pdo->exec($createTableSql);
 
-    $mailHeaders  = "MIME-Version: 1.0
-";
-    $mailHeaders .= "Content-Type: text/html; charset=UTF-8
-";
-    $mailHeaders .= "From: Joule Asset Valuers <no-reply@jouleassetvaluers.com>
-";
-    $mailHeaders .= "Reply-To: {$safeName} <{$email}>
-";
-    $mailHeaders .= "X-Mailer: PHP/" . phpversion();
+    // Insert inquiry into database
+    $insertSql = "
+        INSERT INTO inquiries 
+        (name, email, phone, location, service, message, page_source, ip_address, user_agent)
+        VALUES 
+        (:name, :email, :phone, :location, :service, :message, :page_source, :ip_address, :user_agent)
+    ";
+    $stmt = $pdo->prepare($insertSql);
+    $stmt->execute([
+        ':name'        => $name,
+        ':email'       => $email,
+        ':phone'       => $phone,
+        ':location'    => $location,
+        ':service'     => $service,
+        ':message'     => $message,
+        ':page_source' => $pageSource,
+        ':ip_address'  => $ipAddress,
+        ':user_agent'  => $userAgent
+    ]);
 
-    // Send email to all three recipients
-    foreach ($recipients as $recipient) {
-        @mail($recipient, $subject, $htmlEmail, $mailHeaders);
-    }
+    $insertId = (int)$pdo->lastInsertId();
+    $dbSaved  = true;
+} catch (\Throwable $e) {
+    // Database hiccups will NEVER block lead delivery or return errors to users
+    error_log("Database notice in submit_form.php: " . $e->getMessage());
+    $logLine = date('Y-m-d H:i:s') . " | Ref: {$refCode} | Name: {$name} | Phone: {$phone} | Email: {$email} | Service: {$service} | DB Notice: " . $e->getMessage() . "\n";
+    @file_put_contents(__DIR__ . '/inquiries_backup.log', $logLine, FILE_APPEND | LOCK_EX);
+}
 
-    // 5. Respond with Success
-    if (isAjax()) {
-        jsonResponse(true, 'Thank you! Your inquiry has been submitted successfully. Our engineering team will contact you shortly.', [
-            'inquiry_id' => $insertId
-        ]);
-    } else {
-        header('Location: thank-you.html?status=success&id=' . urlencode((string)$insertId));
-        exit;
-    }
-
-} catch (PDOException $e) {
-    error_log("Database Error in submit_form.php: " . $e->getMessage());
-
-    if (isAjax()) {
-        jsonResponse(false, 'Unable to save inquiry. Please contact us directly at +91 6374191927 or info@jouleassetvaluers.com.');
-    } else {
-        echo "<script>alert('Unable to save inquiry. Please contact us directly at +91 6374191927 or info@jouleassetvaluers.com'); window.history.back();</script>";
-        exit;
-    }
-} catch (Exception $e) {
-    error_log("General Error in submit_form.php: " . $e->getMessage());
-
-    if (isAjax()) {
-        jsonResponse(false, 'An unexpected error occurred. Please try again or call us at +91 6374191927.');
-    } else {
-        echo "<script>alert('An unexpected error occurred. Please contact us directly at +91 6374191927.'); window.history.back();</script>";
-        exit;
-    }
+// =========================================================================
+// 3. Return Success Response & Redirect to thank-you.html
+// =========================================================================
+if (isAjax()) {
+    jsonResponse(true, 'Thank you! Your inquiry has been submitted successfully. Our engineering team will contact you shortly.', [
+        'inquiry_id' => $insertId ?: $refCode,
+        'redirect'   => 'thank-you.html'
+    ]);
+} else {
+    header('Location: thank-you.html?status=success&ref=' . urlencode((string)($insertId ?: $refCode)));
+    exit;
 }
