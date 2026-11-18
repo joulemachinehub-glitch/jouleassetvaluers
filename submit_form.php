@@ -210,7 +210,7 @@ try {
 
     // Send Notification Email to BOTH recipients
     $recipients = [
-        'jouleassetvaluers@gmail.com',
+        'info@jouleassetvaluers.com',
         'balamuruganp0405@gmail.com'
     ];
 
@@ -308,7 +308,7 @@ try {
     $mailHeaders .= "Reply-To: {$safeName} <{$email}>\r\n";
     $mailHeaders .= "X-Mailer: PHP/" . phpversion();
 
-    // Send email to both jouleassetvaluers@gmail.com and balamuruganp0405@gmail.com
+    // Send email to both info@jouleassetvaluers.com and balamuruganp0405@gmail.com
     foreach ($recipients as $recipient) {
         @mail($recipient, $subject, $htmlEmail, $mailHeaders);
     }
@@ -339,7 +339,7 @@ try {
             'message' => 'Unable to save inquiry to database. Please check your network or contact us directly at +91 6374191927.'
         ]);
     } else {
-        echo "<script>alert('Unable to save inquiry. Please contact us directly at +91 6374191927 or jouleassetvaluers@gmail.com'); window.history.back();</script>";
+        echo "<script>alert('Unable to save inquiry. Please contact us directly at +91 6374191927 or info@jouleassetvaluers.com'); window.history.back();</script>";
     }
     exit;
 }
