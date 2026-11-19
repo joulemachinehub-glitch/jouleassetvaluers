@@ -9428,82 +9428,96 @@ img, video, iframe {
 
 
 /* ==============================================================================
-   CRITICAL BUTTON HOVER CONTRAST ENFORCER (GOLDEN TEXT ON DARK HOVER)
-   Fixes issue where spans and text inside buttons remained black on dark hover.
-   Ensures ALL button text, spans, icons, and arrows display bright gold (#facc15).
+   CRITICAL BUTTON UX & CONTRAST SUITE (DEFAULT & HOVER STATES)
+   Enforces high-contrast readable buttons across all device viewports.
+   Preserves outline buttons, secondary buttons, filters, and CTA buttons.
    ============================================================================== */
 
-/* 1. Base Buttons Default State (High-contrast black text on bright gold background) */
+/* 1. Base Button Wrap & Fluid Fit (Prevents long button text from overflowing cards on mobile) */
 .btn,
+.btn-outline,
 .btn-primary,
 .btn-accent,
-.btn-outline,
-.btn-outline-white,
 .btn-secondary,
+.btn-hero-primary,
+a.btn {
+    display: inline-flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    line-height: 1.35 !important;
+}
+
+.service-card a.btn,
+.service-card .btn-outline,
+.service-card-footer a.btn {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. Primary Action & CTA Buttons (Gold background with high-contrast dark text) */
+.btn-primary,
+.btn-accent,
 .btn-hero-primary,
 .cta-btn,
 .cta-banner-btn,
 .submit-btn,
 .form-submit-btn,
 button[type="submit"],
-.filter-btn,
 .nav-cta .btn,
 .drawer-cta .btn,
-.hero-btns .btn,
-.home-hero-btns .btn,
-.contact-form-panel button[type="submit"],
-.widget button,
-a.btn {
+.hero-btns .btn-hero-primary,
+.home-hero-btns .btn-hero-primary,
+.contact-form-panel button[type="submit"] {
     background-color: #facc15 !important;
     background: #facc15 !important;
     color: #000000 !important;
     border: 2px solid #facc15 !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
 }
 
-.btn *,
-.btn span,
-.btn i,
-.btn b,
-.btn strong,
 .btn-primary *,
 .btn-accent *,
-.btn-outline *,
-.btn-secondary *,
 .btn-hero-primary *,
 .cta-btn *,
+.cta-banner-btn *,
 .submit-btn *,
 .form-submit-btn *,
 button[type="submit"] *,
 .nav-cta .btn *,
-.hero-btns .btn *,
-.home-hero-btns .btn *,
-.contact-form-panel button[type="submit"] *,
-a.btn * {
+.drawer-cta .btn *,
+.hero-btns .btn-hero-primary *,
+.home-hero-btns .btn-hero-primary *,
+.contact-form-panel button[type="submit"] * {
     color: #000000 !important;
 }
 
-/* 2. All Buttons Hover State (Dark Navy background + Glowing Gold border & shadow) */
-.btn:hover,
+/* 3. Primary Buttons Hover State (Dark Navy + Glowing Gold border + Bright Gold Text) */
 .btn-primary:hover,
 .btn-accent:hover,
-.btn-outline:hover,
-.btn-outline-white:hover,
-.btn-secondary:hover,
 .btn-hero-primary:hover,
 .cta-btn:hover,
 .cta-banner-btn:hover,
 .submit-btn:hover,
 .form-submit-btn:hover,
 button[type="submit"]:hover,
-.filter-btn:hover,
-.filter-btn.active,
 .nav-cta .btn:hover,
 .drawer-cta .btn:hover,
-.hero-btns .btn:hover,
-.home-hero-btns .btn:hover,
-.contact-form-panel button[type="submit"]:hover,
-.widget button:hover,
-a.btn:hover {
+.hero-btns .btn-hero-primary:hover,
+.home-hero-btns .btn-hero-primary:hover,
+.contact-form-panel button[type="submit"]:hover {
     background-color: #0a192f !important;
     background: #0a192f !important;
     color: #facc15 !important;
@@ -9512,69 +9526,227 @@ a.btn:hover {
     box-shadow: 0 8px 24px rgba(250, 204, 21, 0.45) !important;
 }
 
-/* 3. CRITICAL: Every single child element (span, i, b, strong, text) turns bright gold on hover */
-.btn:hover *,
-.btn:hover span,
-.btn:hover i,
-.btn:hover b,
-.btn:hover strong,
 .btn-primary:hover *,
-.btn-primary:hover span,
-.btn-primary:hover i,
 .btn-accent:hover *,
-.btn-accent:hover span,
-.btn-accent:hover i,
-.btn-outline:hover *,
-.btn-outline:hover span,
-.btn-outline:hover i,
-.btn-secondary:hover *,
-.btn-secondary:hover span,
-.btn-secondary:hover i,
 .btn-hero-primary:hover *,
-.btn-hero-primary:hover span,
-.btn-hero-primary:hover i,
 .cta-btn:hover *,
-.cta-btn:hover span,
-.cta-btn:hover i,
 .cta-banner-btn:hover *,
-.cta-banner-btn:hover span,
-.cta-banner-btn:hover i,
 .submit-btn:hover *,
-.submit-btn:hover span,
-.submit-btn:hover i,
 .form-submit-btn:hover *,
-.form-submit-btn:hover span,
-.form-submit-btn:hover i,
 button[type="submit"]:hover *,
-button[type="submit"]:hover span,
-button[type="submit"]:hover i,
-.filter-btn:hover *,
-.filter-btn.active *,
 .nav-cta .btn:hover *,
-.nav-cta .btn:hover span,
-.nav-cta .btn:hover i,
 .drawer-cta .btn:hover *,
-.drawer-cta .btn:hover span,
-.drawer-cta .btn:hover i,
-.hero-btns .btn:hover *,
-.hero-btns .btn:hover span,
-.hero-btns .btn:hover i,
-.home-hero-btns .btn:hover *,
-.home-hero-btns .btn:hover span,
-.home-hero-btns .btn:hover i,
-.contact-form-panel button[type="submit"]:hover *,
-.contact-form-panel button[type="submit"]:hover span,
-.contact-form-panel button[type="submit"]:hover i,
-.widget button:hover *,
-.widget button:hover span,
-.widget button:hover i,
-a.btn:hover *,
-a.btn:hover span,
-a.btn:hover i {
+.hero-btns .btn-hero-primary:hover *,
+.home-hero-btns .btn-hero-primary:hover *,
+.contact-form-panel button[type="submit"]:hover * {
+    color: #facc15 !important;
+    background: transparent !important;
+}
+
+/* 4. Outline Buttons (.btn-outline) - Transparent with Gold Border */
+.btn-outline,
+.btn-outline-white {
     background: transparent !important;
     background-color: transparent !important;
     color: #facc15 !important;
-    transition: color 0.25s ease !important;
+    border: 2px solid #facc15 !important;
+    font-weight: 600 !important;
+    transition: all 0.25s ease !important;
+}
+
+.btn-outline *,
+.btn-outline-white * {
+    color: #facc15 !important;
+}
+
+.btn-outline:hover,
+.btn-outline-white:hover {
+    background: #facc15 !important;
+    background-color: #facc15 !important;
+    color: #000000 !important;
+    border-color: #facc15 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(250, 204, 21, 0.35) !important;
+}
+
+.btn-outline:hover *,
+.btn-outline-white:hover * {
+    color: #000000 !important;
+    background: transparent !important;
+}
+
+/* 5. Filter Buttons (.filter-btn on blog.html) */
+.filter-btn {
+    background: #0d1e36 !important;
+    background-color: #0d1e36 !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 6px !important;
+    padding: 10px 22px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+}
+
+.filter-btn * {
+    color: #cbd5e1 !important;
+}
+
+.filter-btn:hover {
+    background: #172a45 !important;
+    color: #ffffff !important;
+    border-color: #facc15 !important;
+}
+
+.filter-btn:hover * {
+    color: #ffffff !important;
+}
+
+.filter-btn.active {
+    background: #facc15 !important;
+    background-color: #facc15 !important;
+    color: #000000 !important;
+    border-color: #facc15 !important;
+    box-shadow: 0 4px 16px rgba(250, 204, 21, 0.3) !important;
+}
+
+.filter-btn.active * {
+    color: #000000 !important;
+}
+
+/* 6. WhatsApp Secondary Buttons (Preserve Green Accent) */
+a[href*="wa.me"],
+.btn-whatsapp {
+    background: rgba(37, 211, 102, 0.18) !important;
+    border: 1.5px solid #25D366 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+a[href*="wa.me"] *,
+.btn-whatsapp * {
+    color: #ffffff !important;
+}
+
+a[href*="wa.me"]:hover,
+.btn-whatsapp:hover {
+    background: #25D366 !important;
+    color: #000000 !important;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+    transform: translateY(-2px) !important;
+}
+
+a[href*="wa.me"]:hover *,
+.btn-whatsapp:hover * {
+    color: #000000 !important;
+}
+
+
+/* ==============================================================================
+   UNIVERSAL RESPONSIVE GRID & ALIGNMENT SUITE (MOBILE, TABLET, DESKTOP)
+   Guarantees zero collapse and flawless alignment on all screens.
+   ============================================================================== */
+
+/* 1. Global Page Overflow Containment */
+html {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+}
+
+/* 2. Serviceable Locations Grid (Regional Pages) */
+.serviceable-locations-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 26px !important;
+    width: 100% !important;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .serviceable-locations-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 20px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .serviceable-locations-grid {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+}
+
+/* 3. Universal Mobile Grid Auto-Stacking (<= 767px) */
+@media (max-width: 767px) {
+    /* Prevent fixed minmax or multi-column grids from overflowing or collapsing on mobile */
+    [style*="minmax(340px"],
+    [style*="minmax(320px"],
+    [style*="minmax(310px"],
+    [style*="minmax(300px"],
+    [style*="minmax(280px"],
+    [style*="minmax(260px"] {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+
+    [style*="grid-template-columns: repeat(3"] {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+
+    /* All Cards Scale cleanly to 100% without horizontal wobble */
+    .service-card,
+    .serviceable-location-card,
+    .feature-card,
+    .industry-card,
+    .blog-card,
+    .timeline-item,
+    .stat-item,
+    .benefit-item,
+    .process-pipeline-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+    
+    .container {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Responsive Headings on Mobile */
+    .services-hero-overlay h1,
+    .hero-glass-card h1 {
+        font-size: clamp(1.65rem, 5.5vw, 2.2rem) !important;
+        line-height: 1.25 !important;
+    }
+}
+
+/* 4. Universal Tablet Grid Scaling (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    [style*="minmax(340px"],
+    [style*="minmax(320px"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 22px !important;
+    }
+
+    .container {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        max-width: 100% !important;
+    }
 }
 
 
@@ -9585,14 +9757,7 @@ a.btn:hover i {
    remain fixed/sticky in view while only the center article content scrolls.
    ============================================================================== */
 
-/* 1. Prevent any overflow scroll container creation on ancestors */
-html, body {
-    overflow-x: clip !important;
-    overflow-y: visible !important;
-}
-
-.section, 
-.container, 
+/* Blog Layout Container isolation */
 .blog-inner-container, 
 .blog-inner-layout, 
 .blog-layout {
@@ -9600,7 +9765,7 @@ html, body {
     contain: none !important;
 }
 
-/* 2. Desktop Screens (min-width: 1201px): 3-Column Layout with Dual Sticky Sidebars */
+/* Desktop Screens (min-width: 1201px): 3-Column Layout with Dual Sticky Sidebars */
 @media screen and (min-width: 1201px) {
     .blog-inner-container {
         max-width: 1440px !important;
@@ -9678,7 +9843,7 @@ html, body {
     }
 }
 
-/* 3. Medium Desktop / Laptop Screens (992px to 1200px): Right Sidebar Sticky */
+/* Medium Desktop / Laptop Screens (992px to 1200px): Right Sidebar Sticky */
 @media screen and (min-width: 992px) and (max-width: 1200px) {
     .blog-inner-container {
         max-width: 1200px !important;
@@ -9743,7 +9908,7 @@ html, body {
     }
 }
 
-/* 4. Mobile & Tablet Screens (<= 991px): Clean Natural Stacking */
+/* Mobile & Tablet Screens (<= 991px): Clean Natural Stacking */
 @media screen and (max-width: 991px) {
     .blog-inner-layout {
         display: flex !important;
@@ -9782,7 +9947,7 @@ html, body {
     }
 }
 
-/* 5. Custom Scrollbars for Sticky Navigation Sidebars */
+/* Custom Scrollbars for Sticky Navigation Sidebars */
 .blog-sidebar-left::-webkit-scrollbar,
 .blog-sidebar-right::-webkit-scrollbar,
 .blog-layout .sidebar::-webkit-scrollbar {
@@ -9983,7 +10148,7 @@ html, body {
     .comparison-table,
     .rul-table,
     .blog-main-content table {
-        min-width: 520px !important;
+        min-width: 500px !important;
         font-size: 0.84rem !important;
     }
 
