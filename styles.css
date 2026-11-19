@@ -9427,3 +9427,154 @@ img, video, iframe {
         height: 42px !important;
     }
 }
+
+
+/* ==============================================================================
+   CRITICAL BUTTON HOVER CONTRAST ENFORCER (GOLDEN TEXT ON DARK HOVER)
+   Fixes issue where spans and text inside buttons remained black on dark hover.
+   Ensures ALL button text, spans, icons, and arrows display bright gold (#facc15).
+   ============================================================================== */
+
+/* 1. Base Buttons Default State (High-contrast black text on bright gold background) */
+.btn,
+.btn-primary,
+.btn-accent,
+.btn-outline,
+.btn-outline-white,
+.btn-secondary,
+.btn-hero-primary,
+.cta-btn,
+.cta-banner-btn,
+.submit-btn,
+.form-submit-btn,
+button[type="submit"],
+.filter-btn,
+.nav-cta .btn,
+.drawer-cta .btn,
+.hero-btns .btn,
+.home-hero-btns .btn,
+.contact-form-panel button[type="submit"],
+.widget button,
+a.btn {
+    background-color: #facc15 !important;
+    background: #facc15 !important;
+    color: #000000 !important;
+    border: 2px solid #facc15 !important;
+}
+
+.btn *,
+.btn span,
+.btn i,
+.btn b,
+.btn strong,
+.btn-primary *,
+.btn-accent *,
+.btn-outline *,
+.btn-secondary *,
+.btn-hero-primary *,
+.cta-btn *,
+.submit-btn *,
+.form-submit-btn *,
+button[type="submit"] *,
+.nav-cta .btn *,
+.hero-btns .btn *,
+.home-hero-btns .btn *,
+.contact-form-panel button[type="submit"] *,
+a.btn * {
+    color: #000000 !important;
+}
+
+/* 2. All Buttons Hover State (Dark Navy background + Glowing Gold border & shadow) */
+.btn:hover,
+.btn-primary:hover,
+.btn-accent:hover,
+.btn-outline:hover,
+.btn-outline-white:hover,
+.btn-secondary:hover,
+.btn-hero-primary:hover,
+.cta-btn:hover,
+.cta-banner-btn:hover,
+.submit-btn:hover,
+.form-submit-btn:hover,
+button[type="submit"]:hover,
+.filter-btn:hover,
+.filter-btn.active,
+.nav-cta .btn:hover,
+.drawer-cta .btn:hover,
+.hero-btns .btn:hover,
+.home-hero-btns .btn:hover,
+.contact-form-panel button[type="submit"]:hover,
+.widget button:hover,
+a.btn:hover {
+    background-color: #0a192f !important;
+    background: #0a192f !important;
+    color: #facc15 !important;
+    border-color: #facc15 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(250, 204, 21, 0.45) !important;
+}
+
+/* 3. CRITICAL: Every single child element (span, i, b, strong, text) turns bright gold on hover */
+.btn:hover *,
+.btn:hover span,
+.btn:hover i,
+.btn:hover b,
+.btn:hover strong,
+.btn-primary:hover *,
+.btn-primary:hover span,
+.btn-primary:hover i,
+.btn-accent:hover *,
+.btn-accent:hover span,
+.btn-accent:hover i,
+.btn-outline:hover *,
+.btn-outline:hover span,
+.btn-outline:hover i,
+.btn-secondary:hover *,
+.btn-secondary:hover span,
+.btn-secondary:hover i,
+.btn-hero-primary:hover *,
+.btn-hero-primary:hover span,
+.btn-hero-primary:hover i,
+.cta-btn:hover *,
+.cta-btn:hover span,
+.cta-btn:hover i,
+.cta-banner-btn:hover *,
+.cta-banner-btn:hover span,
+.cta-banner-btn:hover i,
+.submit-btn:hover *,
+.submit-btn:hover span,
+.submit-btn:hover i,
+.form-submit-btn:hover *,
+.form-submit-btn:hover span,
+.form-submit-btn:hover i,
+button[type="submit"]:hover *,
+button[type="submit"]:hover span,
+button[type="submit"]:hover i,
+.filter-btn:hover *,
+.filter-btn.active *,
+.nav-cta .btn:hover *,
+.nav-cta .btn:hover span,
+.nav-cta .btn:hover i,
+.drawer-cta .btn:hover *,
+.drawer-cta .btn:hover span,
+.drawer-cta .btn:hover i,
+.hero-btns .btn:hover *,
+.hero-btns .btn:hover span,
+.hero-btns .btn:hover i,
+.home-hero-btns .btn:hover *,
+.home-hero-btns .btn:hover span,
+.home-hero-btns .btn:hover i,
+.contact-form-panel button[type="submit"]:hover *,
+.contact-form-panel button[type="submit"]:hover span,
+.contact-form-panel button[type="submit"]:hover i,
+.widget button:hover *,
+.widget button:hover span,
+.widget button:hover i,
+a.btn:hover *,
+a.btn:hover span,
+a.btn:hover i {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #facc15 !important;
+    transition: color 0.25s ease !important;
+}
