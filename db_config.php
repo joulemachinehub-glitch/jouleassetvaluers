@@ -11,7 +11,7 @@ if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
 
 /**
  * Returns an active PDO connection to MySQL.
- * Automatically creates the inquiries table if it does not already exist.
+ * Automatically creates the website_inquiries table if it does not already exist.
  */
 function getDbConnection(): ?PDO {
     static $pdo = null;
@@ -33,9 +33,9 @@ function getDbConnection(): ?PDO {
     try {
         $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
 
-        // Ensure inquiries table exists
+        // Ensure website_inquiries table exists
         $createTableSql = "
-            CREATE TABLE IF NOT EXISTS inquiries (
+            CREATE TABLE IF NOT EXISTS website_inquiries (
                 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(150) NOT NULL,
                 email VARCHAR(191) NOT NULL,
@@ -47,7 +47,11 @@ function getDbConnection(): ?PDO {
                 ip_address VARCHAR(45) DEFAULT NULL,
                 user_agent VARCHAR(255) DEFAULT NULL,
                 status VARCHAR(50) DEFAULT 'New',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_email (email),
+                INDEX idx_phone (phone),
+                INDEX idx_service (service),
+                INDEX idx_created_at (created_at)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ";
         $pdo->exec($createTableSql);
