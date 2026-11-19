@@ -7210,9 +7210,7 @@ html, body {
 /* 2. Responsive Tables, Iframes & Media */
 table {
     width: 100% !important;
-    display: block !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
 }
 
 iframe, embed, object {
@@ -9802,4 +9800,206 @@ html, body {
 .blog-sidebar-right::-webkit-scrollbar-track,
 .blog-layout .sidebar::-webkit-scrollbar-track {
     background: transparent !important;
+}
+
+
+/* ==============================================================================
+   MASTER RESPONSIVE BLOG TABLE SUITE (MOBILE, TABLET & DESKTOP ALIGNMENT)
+   Ensures flawless alignment, zero horizontal overflow, smooth touch scroll,
+   and executive typography across all device viewports.
+   ============================================================================== */
+
+/* Container wrapper guaranteeing horizontal scroll containment on all devices */
+.comparison-table-wrapper,
+.table-responsive,
+.blog-table-wrapper {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 28px 0 !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: #0d1e36 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+    position: relative !important;
+}
+
+/* Custom sleek scrollbar for tables */
+.comparison-table-wrapper::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar,
+.blog-table-wrapper::-webkit-scrollbar {
+    height: 6px !important;
+}
+
+.comparison-table-wrapper::-webkit-scrollbar-track,
+.table-responsive::-webkit-scrollbar-track,
+.blog-table-wrapper::-webkit-scrollbar-track {
+    background: rgba(10, 25, 47, 0.7) !important;
+    border-radius: 4px !important;
+}
+
+.comparison-table-wrapper::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb,
+.blog-table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(250, 204, 21, 0.45) !important;
+    border-radius: 4px !important;
+}
+
+.comparison-table-wrapper::-webkit-scrollbar-thumb:hover,
+.table-responsive::-webkit-scrollbar-thumb:hover,
+.blog-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #facc15 !important;
+}
+
+/* Base Table Elements */
+.comparison-table,
+.rul-table,
+.blog-main-content table {
+    display: table !important;
+    width: 100% !important;
+    min-width: 580px !important;
+    border-collapse: collapse !important;
+    margin: 0 !important;
+    text-align: left !important;
+    font-size: 0.92rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Table Header */
+.comparison-table thead,
+.rul-table thead,
+.blog-main-content table thead {
+    display: table-header-group !important;
+}
+
+.comparison-table th,
+.rul-table th,
+.blog-main-content table th {
+    background: #111D35 !important;
+    color: #facc15 !important;
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    padding: 14px 18px !important;
+    border-bottom: 2px solid #facc15 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    text-align: left !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+}
+
+.comparison-table th:last-child,
+.rul-table th:last-child,
+.blog-main-content table th:last-child {
+    border-right: none !important;
+}
+
+/* Table Body Rows & Cells */
+.comparison-table tbody,
+.rul-table tbody,
+.blog-main-content table tbody {
+    display: table-row-group !important;
+}
+
+.comparison-table tr,
+.rul-table tr,
+.blog-main-content table tr {
+    display: table-row !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.comparison-table tr:nth-child(even) td,
+.rul-table tr:nth-child(even) td,
+.blog-main-content table tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.comparison-table tr:hover td,
+.rul-table tr:hover td,
+.blog-main-content table tr:hover td {
+    background: rgba(250, 204, 21, 0.06) !important;
+}
+
+.comparison-table td,
+.rul-table td,
+.blog-main-content table td {
+    padding: 13px 18px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: #e2e8f0 !important;
+    font-size: 0.91rem !important;
+    vertical-align: top !important;
+    text-align: left !important;
+}
+
+.comparison-table td:last-child,
+.rul-table td:last-child,
+.blog-main-content table td:last-child {
+    border-right: none !important;
+}
+
+.comparison-table td strong,
+.rul-table td strong,
+.blog-main-content table td strong {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Tablet Alignment & Typography (768px to 1199px) */
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+    .comparison-table th,
+    .rul-table th,
+    .blog-main-content table th {
+        padding: 12px 14px !important;
+        font-size: 0.84rem !important;
+    }
+
+    .comparison-table td,
+    .rul-table td,
+    .blog-main-content table td {
+        padding: 12px 14px !important;
+        font-size: 0.87rem !important;
+    }
+
+    .comparison-table-wrapper,
+    .table-responsive,
+    .blog-table-wrapper {
+        margin: 22px 0 !important;
+    }
+}
+
+/* Mobile Alignment & Typography (max-width: 767px) */
+@media screen and (max-width: 767px) {
+    .comparison-table-wrapper,
+    .table-responsive,
+    .blog-table-wrapper {
+        margin: 18px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    .comparison-table,
+    .rul-table,
+    .blog-main-content table {
+        min-width: 520px !important;
+        font-size: 0.84rem !important;
+    }
+
+    .comparison-table th,
+    .rul-table th,
+    .blog-main-content table th {
+        padding: 10px 12px !important;
+        font-size: 0.78rem !important;
+        letter-spacing: 0.4px !important;
+    }
+
+    .comparison-table td,
+    .rul-table td,
+    .blog-main-content table td {
+        padding: 10px 12px !important;
+        font-size: 0.82rem !important;
+        line-height: 1.5 !important;
+    }
 }
