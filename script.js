@@ -54,17 +54,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 3. Sticky Navigation Header
+    // 3. Sticky Navigation Header & Floating Controls
     // ==========================================
     const navbar = document.querySelector('.navbar');
-    
+    const scrollUpBtn = document.getElementById('scrollUpBtn');
+    const scrollDownBtn = document.getElementById('scrollDownBtn');
+
+    if (scrollUpBtn) {
+        scrollUpBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    if (scrollDownBtn) {
+        scrollDownBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    }
+
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('sticky');
-        } else {
-            navbar.classList.remove('sticky');
+        const scrollY = window.scrollY || window.pageYOffset;
+        if (navbar) {
+            if (scrollY > 50) {
+                navbar.classList.add('sticky');
+            } else {
+                navbar.classList.remove('sticky');
+            }
         }
-    });
+
+        if (scrollUpBtn) {
+            if (scrollY > 300) {
+                scrollUpBtn.classList.add('visible');
+            } else {
+                scrollUpBtn.classList.remove('visible');
+            }
+        }
+    }, { passive: true });
 
     // Mobile Menu Toggle Event Listener (Phones & Tablets)
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -102,6 +129,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (icon) icon.className = 'fa-solid fa-bars';
             }
         });
+
+        // Close mobile menu on resize to desktop (e.g. tablet orientation change)
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 991 && navMenu.classList.contains('open')) {
+                navMenu.classList.remove('open');
+                const icon = mobileMenuToggle.querySelector('i');
+                if (icon) icon.className = 'fa-solid fa-bars';
+            }
+        }, { passive: true });
     }
 
     // ==========================================
