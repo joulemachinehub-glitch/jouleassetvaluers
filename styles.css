@@ -6049,7 +6049,7 @@ button[type="submit"]:hover i,
    ========================================================================== */
 @media (max-width: 768px) {
     html, body {
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
         width: 100% !important;
         max-width: 100% !important;
     }
@@ -6732,7 +6732,7 @@ button.float-action-btn.float-scroll-down:hover * {
 /* 2. MOBILE DEVICES (< 768px) & SMALL SMARTPHONES (< 480px) */
 @media (max-width: 767px) {
     html, body {
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
         width: 100% !important;
         max-width: 100% !important;
     }
@@ -8974,7 +8974,7 @@ button.captcha-refresh-btn:hover i,
 
 /* --- 1. GLOBAL OVERFLOW & BASE RESPONSIVE RULES --- */
 html, body {
-    overflow-x: hidden !important;
+    overflow-x: clip !important;
     width: 100% !important;
     max-width: 100% !important;
     position: relative !important;
@@ -9577,4 +9577,229 @@ a.btn:hover i {
     background-color: transparent !important;
     color: #facc15 !important;
     transition: color 0.25s ease !important;
+}
+
+
+/* ==============================================================================
+   MASTER BLOG DUAL FIXED / STICKY SIDEBAR SUITE (ALL BLOG PAGES)
+   Guarantees that on desktop viewports, when the user scrolls the blog article,
+   both the left sidebar (Technical Articles) and right sidebar (Our Services)
+   remain fixed/sticky in view while only the center article content scrolls.
+   ============================================================================== */
+
+/* 1. Prevent any overflow scroll container creation on ancestors */
+html, body {
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+}
+
+.section, 
+.container, 
+.blog-inner-container, 
+.blog-inner-layout, 
+.blog-layout {
+    overflow: visible !important;
+    contain: none !important;
+}
+
+/* 2. Desktop Screens (min-width: 1201px): 3-Column Layout with Dual Sticky Sidebars */
+@media screen and (min-width: 1201px) {
+    .blog-inner-container {
+        max-width: 1440px !important;
+        margin: 0 auto !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+        width: 100% !important;
+    }
+
+    .blog-inner-layout {
+        display: grid !important;
+        grid-template-columns: 290px minmax(0, 1fr) 310px !important;
+        gap: 36px !important;
+        align-items: start !important;
+    }
+
+    .blog-sidebar-left {
+        display: block !important;
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 96px !important;
+        align-self: start !important;
+        height: fit-content !important;
+        max-height: calc(100vh - 110px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(250, 204, 21, 0.4) transparent !important;
+        padding-right: 6px !important;
+        z-index: 10 !important;
+    }
+
+    .blog-sidebar-right {
+        display: block !important;
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 96px !important;
+        align-self: start !important;
+        height: fit-content !important;
+        max-height: calc(100vh - 110px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(250, 204, 21, 0.4) transparent !important;
+        padding-right: 6px !important;
+        z-index: 10 !important;
+    }
+
+    .blog-main-content {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Outer Blog Listing Page (blog.html) Sticky Sidebar */
+    .blog-layout {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 340px !important;
+        gap: 40px !important;
+        align-items: start !important;
+    }
+
+    .blog-layout .sidebar {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 96px !important;
+        align-self: start !important;
+        height: fit-content !important;
+        max-height: calc(100vh - 110px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(250, 204, 21, 0.4) transparent !important;
+        padding-right: 6px !important;
+        z-index: 10 !important;
+    }
+}
+
+/* 3. Medium Desktop / Laptop Screens (992px to 1200px): Right Sidebar Sticky */
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+    .blog-inner-container {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        width: 100% !important;
+    }
+
+    .blog-inner-layout {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 310px !important;
+        gap: 28px !important;
+        align-items: start !important;
+    }
+
+    .blog-sidebar-left {
+        display: none !important;
+    }
+
+    .blog-sidebar-right {
+        display: block !important;
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 96px !important;
+        align-self: start !important;
+        height: fit-content !important;
+        max-height: calc(100vh - 110px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(250, 204, 21, 0.4) transparent !important;
+        padding-right: 6px !important;
+        z-index: 10 !important;
+    }
+
+    .blog-main-content {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .blog-layout {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 300px !important;
+        gap: 28px !important;
+        align-items: start !important;
+    }
+
+    .blog-layout .sidebar {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 96px !important;
+        align-self: start !important;
+        height: fit-content !important;
+        max-height: calc(100vh - 110px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(250, 204, 21, 0.4) transparent !important;
+        padding-right: 6px !important;
+        z-index: 10 !important;
+    }
+}
+
+/* 4. Mobile & Tablet Screens (<= 991px): Clean Natural Stacking */
+@media screen and (max-width: 991px) {
+    .blog-inner-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 32px !important;
+    }
+
+    .blog-main-content {
+        order: 1 !important;
+        width: 100% !important;
+    }
+
+    .blog-sidebar-left,
+    .blog-sidebar-right {
+        order: 2 !important;
+        width: 100% !important;
+        position: static !important;
+        max-height: none !important;
+        overflow-y: visible !important;
+        margin-top: 24px !important;
+        padding-right: 0 !important;
+    }
+
+    .blog-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 32px !important;
+    }
+
+    .blog-layout .sidebar {
+        position: static !important;
+        max-height: none !important;
+        overflow-y: visible !important;
+        margin-top: 24px !important;
+        padding-right: 0 !important;
+    }
+}
+
+/* 5. Custom Scrollbars for Sticky Navigation Sidebars */
+.blog-sidebar-left::-webkit-scrollbar,
+.blog-sidebar-right::-webkit-scrollbar,
+.blog-layout .sidebar::-webkit-scrollbar {
+    width: 5px !important;
+}
+
+.blog-sidebar-left::-webkit-scrollbar-thumb,
+.blog-sidebar-right::-webkit-scrollbar-thumb,
+.blog-layout .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(250, 204, 21, 0.4) !important;
+    border-radius: 4px !important;
+}
+
+.blog-sidebar-left::-webkit-scrollbar-track,
+.blog-sidebar-right::-webkit-scrollbar-track,
+.blog-layout .sidebar::-webkit-scrollbar-track {
+    background: transparent !important;
 }

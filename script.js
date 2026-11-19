@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function closeLightbox() {
             lightboxModal.classList.remove('open');
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = '';
             setTimeout(() => {
                 if (lightboxImage) lightboxImage.src = '';
             }, 300);
