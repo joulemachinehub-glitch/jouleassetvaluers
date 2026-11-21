@@ -67,7 +67,7 @@
     <meta name="twitter:image" content="https://jouleassetvaluers.com/blog-epcg-scheme-documentation-mistakes-importers-avoid.jpg">
 
     <!-- CSS & Fonts -->
-    <link rel="stylesheet" href="styles.css?v=20261119_v140">
+    <link rel="stylesheet" href="styles.css?v=20261121_v160">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -333,6 +333,155 @@
       ]
 }
     </script>
+
+    <!-- Critical Blog Layout & FAQ Alignment Styles (Bypasses Browser Cache) -->
+    <style>
+        /* Dual Fixed Sticky Sidebars on Desktop */
+        @media screen and (min-width: 1025px) {
+            .blog-inner-container {
+                max-width: 1440px !important;
+                margin: 0 auto !important;
+                padding-left: 24px !important;
+                padding-right: 24px !important;
+                width: 100% !important;
+                overflow: visible !important;
+            }
+            .blog-inner-layout {
+                display: grid !important;
+                grid-template-columns: 290px minmax(0, 1fr) 310px !important;
+                gap: 36px !important;
+                align-items: start !important;
+                position: relative !important;
+                overflow: visible !important;
+            }
+            .blog-sidebar-left {
+                display: block !important;
+                position: -webkit-sticky !important;
+                position: sticky !important;
+                top: 96px !important;
+                align-self: start !important;
+                height: fit-content !important;
+                max-height: calc(100vh - 110px) !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: thin !important;
+                scrollbar-color: rgba(250, 204, 21, 0.4) transparent !important;
+                padding-right: 6px !important;
+                z-index: 10 !important;
+            }
+            .blog-sidebar-right {
+                display: block !important;
+                position: -webkit-sticky !important;
+                position: sticky !important;
+                top: 96px !important;
+                align-self: start !important;
+                height: fit-content !important;
+                max-height: calc(100vh - 110px) !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: thin !important;
+                scrollbar-color: rgba(250, 204, 21, 0.4) transparent !important;
+                padding-right: 6px !important;
+                z-index: 10 !important;
+            }
+            .blog-main-content {
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        /* FAQ Full-Width Right-Aligned Chevron Accordion */
+        .blog-faq-card,
+        .faq-item.blog-faq-card {
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            margin-bottom: 14px !important;
+            border: 1px solid rgba(255, 255, 255, 0.09) !important;
+            border-left: 3.5px solid rgba(250, 204, 21, 0.35) !important;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.92) 0%, rgba(13, 30, 54, 0.96) 100%) !important;
+        }
+        .blog-faq-btn,
+        .faq-question.blog-faq-btn,
+        .blog-faq-card .faq-question {
+            width: 100% !important;
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 18px 24px !important;
+            text-align: left !important;
+            box-sizing: border-box !important;
+            gap: 16px !important;
+            background: transparent !important;
+            border: none !important;
+            cursor: pointer !important;
+        }
+        .blog-faq-btn .blog-faq-q-text,
+        .faq-question .blog-faq-q-text {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 14px !important;
+            text-align: left !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .blog-faq-btn .blog-faq-num,
+        .faq-question .blog-faq-num {
+            flex: 0 0 auto !important;
+            color: #facc15 !important;
+            font-weight: 800 !important;
+            font-size: 1.05rem !important;
+            line-height: 1 !important;
+        }
+        .blog-faq-btn .blog-faq-title,
+        .faq-question .blog-faq-title {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+            color: #ffffff !important;
+            font-size: 1.02rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+        }
+        .blog-faq-btn .blog-faq-icon-pill,
+        .faq-question .blog-faq-icon-pill {
+            flex: 0 0 36px !important;
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
+            margin-left: auto !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+        }
+        .blog-faq-btn .blog-faq-icon-pill i,
+        .faq-question .blog-faq-icon-pill i {
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
+            border-radius: 50% !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.85rem !important;
+            color: #facc15 !important;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            flex-shrink: 0 !important;
+        }
+        .faq-item.active .blog-faq-btn .blog-faq-icon-pill i,
+        .faq-item.active .faq-question .blog-faq-icon-pill i {
+            transform: rotate(180deg) !important;
+            background: #facc15 !important;
+            color: #0a192f !important;
+            border-color: #facc15 !important;
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.45) !important;
+        }
+    </style>
+
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -757,12 +906,12 @@
                                 <div class="faq-accordion blog-faq-accordion">
                                     <!-- FAQ 1 -->
                                     <div class="faq-item blog-faq-card active">
-                                        <button class="faq-question blog-faq-btn" aria-expanded="true">
-                                            <span class="blog-faq-q-text">
+                                        <button class="faq-question blog-faq-btn" aria-expanded="true" style="width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 18px 24px !important; box-sizing: border-box !important;">
+                                            <span class="blog-faq-q-text" style="display: flex !important; align-items: center !important; gap: 14px !important; flex: 1 1 auto !important; min-width: 0 !important; text-align: left !important;">
                                                 <span class="blog-faq-num">01</span>
                                                 <span class="blog-faq-title">What documents are required for the EPCG Scheme?</span>
                                             </span>
-                                            <span class="blog-faq-icon-pill"><i class="fa-solid fa-chevron-down"></i></span>
+                                            <span class="blog-faq-icon-pill" style="margin-left: auto !important; flex: 0 0 36px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important;"><i class="fa-solid fa-chevron-down"></i></span>
                                         </button>
                                         <div class="faq-answer blog-faq-answer">
                                             <div class="blog-faq-answer-inner">
@@ -773,12 +922,12 @@
 
                                     <!-- FAQ 2 -->
                                     <div class="faq-item blog-faq-card">
-                                        <button class="faq-question blog-faq-btn" aria-expanded="false">
-                                            <span class="blog-faq-q-text">
+                                        <button class="faq-question blog-faq-btn" aria-expanded="false" style="width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 18px 24px !important; box-sizing: border-box !important;">
+                                            <span class="blog-faq-q-text" style="display: flex !important; align-items: center !important; gap: 14px !important; flex: 1 1 auto !important; min-width: 0 !important; text-align: left !important;">
                                                 <span class="blog-faq-num">02</span>
                                                 <span class="blog-faq-title">What is an EPCG Installation Certificate?</span>
                                             </span>
-                                            <span class="blog-faq-icon-pill"><i class="fa-solid fa-chevron-down"></i></span>
+                                            <span class="blog-faq-icon-pill" style="margin-left: auto !important; flex: 0 0 36px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important;"><i class="fa-solid fa-chevron-down"></i></span>
                                         </button>
                                         <div class="faq-answer blog-faq-answer">
                                             <div class="blog-faq-answer-inner">
@@ -789,12 +938,12 @@
 
                                     <!-- FAQ 3 -->
                                     <div class="faq-item blog-faq-card">
-                                        <button class="faq-question blog-faq-btn" aria-expanded="false">
-                                            <span class="blog-faq-q-text">
+                                        <button class="faq-question blog-faq-btn" aria-expanded="false" style="width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 18px 24px !important; box-sizing: border-box !important;">
+                                            <span class="blog-faq-q-text" style="display: flex !important; align-items: center !important; gap: 14px !important; flex: 1 1 auto !important; min-width: 0 !important; text-align: left !important;">
                                                 <span class="blog-faq-num">03</span>
                                                 <span class="blog-faq-title">What is the time limit for submitting an EPCG Installation Certificate?</span>
                                             </span>
-                                            <span class="blog-faq-icon-pill"><i class="fa-solid fa-chevron-down"></i></span>
+                                            <span class="blog-faq-icon-pill" style="margin-left: auto !important; flex: 0 0 36px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important;"><i class="fa-solid fa-chevron-down"></i></span>
                                         </button>
                                         <div class="faq-answer blog-faq-answer">
                                             <div class="blog-faq-answer-inner">
@@ -805,12 +954,12 @@
 
                                     <!-- FAQ 4 -->
                                     <div class="faq-item blog-faq-card">
-                                        <button class="faq-question blog-faq-btn" aria-expanded="false">
-                                            <span class="blog-faq-q-text">
+                                        <button class="faq-question blog-faq-btn" aria-expanded="false" style="width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 18px 24px !important; box-sizing: border-box !important;">
+                                            <span class="blog-faq-q-text" style="display: flex !important; align-items: center !important; gap: 14px !important; flex: 1 1 auto !important; min-width: 0 !important; text-align: left !important;">
                                                 <span class="blog-faq-num">04</span>
                                                 <span class="blog-faq-title">Can a Chartered Engineer issue an EPCG Installation Certificate?</span>
                                             </span>
-                                            <span class="blog-faq-icon-pill"><i class="fa-solid fa-chevron-down"></i></span>
+                                            <span class="blog-faq-icon-pill" style="margin-left: auto !important; flex: 0 0 36px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important;"><i class="fa-solid fa-chevron-down"></i></span>
                                         </button>
                                         <div class="faq-answer blog-faq-answer">
                                             <div class="blog-faq-answer-inner">
@@ -821,12 +970,12 @@
 
                                     <!-- FAQ 5 -->
                                     <div class="faq-item blog-faq-card">
-                                        <button class="faq-question blog-faq-btn" aria-expanded="false">
-                                            <span class="blog-faq-q-text">
+                                        <button class="faq-question blog-faq-btn" aria-expanded="false" style="width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 18px 24px !important; box-sizing: border-box !important;">
+                                            <span class="blog-faq-q-text" style="display: flex !important; align-items: center !important; gap: 14px !important; flex: 1 1 auto !important; min-width: 0 !important; text-align: left !important;">
                                                 <span class="blog-faq-num">05</span>
                                                 <span class="blog-faq-title">What happens if EPCG documents contain incorrect information?</span>
                                             </span>
-                                            <span class="blog-faq-icon-pill"><i class="fa-solid fa-chevron-down"></i></span>
+                                            <span class="blog-faq-icon-pill" style="margin-left: auto !important; flex: 0 0 36px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important;"><i class="fa-solid fa-chevron-down"></i></span>
                                         </button>
                                         <div class="faq-answer blog-faq-answer">
                                             <div class="blog-faq-answer-inner">
@@ -837,12 +986,12 @@
 
                                     <!-- FAQ 6 -->
                                     <div class="faq-item blog-faq-card">
-                                        <button class="faq-question blog-faq-btn" aria-expanded="false">
-                                            <span class="blog-faq-q-text">
+                                        <button class="faq-question blog-faq-btn" aria-expanded="false" style="width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 18px 24px !important; box-sizing: border-box !important;">
+                                            <span class="blog-faq-q-text" style="display: flex !important; align-items: center !important; gap: 14px !important; flex: 1 1 auto !important; min-width: 0 !important; text-align: left !important;">
                                                 <span class="blog-faq-num">06</span>
                                                 <span class="blog-faq-title">What is an EPCG Export Obligation Discharge Certificate (EODC)?</span>
                                             </span>
-                                            <span class="blog-faq-icon-pill"><i class="fa-solid fa-chevron-down"></i></span>
+                                            <span class="blog-faq-icon-pill" style="margin-left: auto !important; flex: 0 0 36px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important;"><i class="fa-solid fa-chevron-down"></i></span>
                                         </button>
                                         <div class="faq-answer blog-faq-answer">
                                             <div class="blog-faq-answer-inner">
@@ -853,12 +1002,12 @@
 
                                     <!-- FAQ 7 -->
                                     <div class="faq-item blog-faq-card">
-                                        <button class="faq-question blog-faq-btn" aria-expanded="false">
-                                            <span class="blog-faq-q-text">
+                                        <button class="faq-question blog-faq-btn" aria-expanded="false" style="width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 18px 24px !important; box-sizing: border-box !important;">
+                                            <span class="blog-faq-q-text" style="display: flex !important; align-items: center !important; gap: 14px !important; flex: 1 1 auto !important; min-width: 0 !important; text-align: left !important;">
                                                 <span class="blog-faq-num">07</span>
                                                 <span class="blog-faq-title">Where can businesses get EPCG installation certification in Chennai?</span>
                                             </span>
-                                            <span class="blog-faq-icon-pill"><i class="fa-solid fa-chevron-down"></i></span>
+                                            <span class="blog-faq-icon-pill" style="margin-left: auto !important; flex: 0 0 36px !important; width: 36px !important; height: 36px !important; min-width: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important;"><i class="fa-solid fa-chevron-down"></i></span>
                                         </button>
                                         <div class="faq-answer blog-faq-answer">
                                             <div class="blog-faq-answer-inner">
