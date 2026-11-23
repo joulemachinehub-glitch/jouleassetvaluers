@@ -16,7 +16,7 @@
             var proto = window.location.protocol;
             if (host && host !== 'localhost' && host !== '127.0.0.1' && !host.startsWith('192.168.')) {
                 if (proto === 'http:' || host.indexOf('www.') === 0) {
-                    var canonicalHost = host.replace(/^www./i, '');
+                    var canonicalHost = host.replace(/^www\./i, '');
                     window.location.replace('https://' + canonicalHost + window.location.pathname + window.location.search + window.location.hash);
                 }
             }
@@ -67,7 +67,7 @@
     <meta name="theme-color" content="#0a192f">
 
     <!-- Preload Featured Image -->
-    <link rel="preload" as="image" href="blog-empty-shipping-container-inspection.jpg">
+    <link rel="preload" as="image" href="blog-empty-shipping-container-inspection.jpg?v=20261123_v162">
 
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,28 +78,20 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css?v=20261121_v160">
 
-    <!-- Theme Initializer -->
-    <script>
-        (function() {
-            const storedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', storedTheme);
-        })();
-    </script>
-
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Joule Asset Valuers">
     <meta property="og:title" content="Empty Shipping Container Inspection: Checklist and Defects">
     <meta property="og:description" content="Learn the empty shipping container inspection checklist, common container defects, structural checks, door inspection and pre-loading requirements.">
     <meta property="og:url" content="https://jouleassetvaluers.com/empty-shipping-container-inspection-checklist-common-defects.html">
-    <meta property="og:image" content="https://jouleassetvaluers.com/blog-empty-shipping-container-inspection.jpg">
+    <meta property="og:image" content="https://jouleassetvaluers.com/blog-empty-shipping-container-inspection.jpg?v=20261123_v162">
     <meta property="og:image:width" content="1024">
     <meta property="og:image:height" content="576">
-    <meta property="og:image:alt" content="Empty Shipping Container Inspection - Checklist and Common Defects">
+    <meta property="og:image:alt" content="Empty Shipping Container Inspection: Checklist and Common Defects - Joule Asset Valuers">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Empty Shipping Container Inspection: Checklist and Defects">
     <meta name="twitter:description" content="Learn the empty shipping container inspection checklist, common container defects, structural checks, door inspection and pre-loading requirements.">
-    <meta name="twitter:image" content="https://jouleassetvaluers.com/blog-empty-shipping-container-inspection.jpg">
+    <meta name="twitter:image" content="https://jouleassetvaluers.com/blog-empty-shipping-container-inspection.jpg?v=20261123_v162">
 
     <!-- Structured Data (Schema.org JSON-LD - Graph Format) -->
     <script type="application/ld+json">
@@ -289,170 +281,158 @@
       ]
     }
     </script>
+
+    <style>
+        .blog-faq-icon-pill {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            background: rgba(250, 204, 21, 0.12) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.85rem !important;
+            color: #facc15 !important;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            flex-shrink: 0 !important;
+        }
+        .faq-item.active .blog-faq-btn .blog-faq-icon-pill i,
+        .faq-item.active .faq-question .blog-faq-icon-pill i {
+            transform: rotate(180deg) !important;
+            background: #facc15 !important;
+            color: #0a192f !important;
+            border-color: #facc15 !important;
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.45) !important;
+        }
+    </style>
 </head>
-<body class="blog-detail-body">
+<body>
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5B79PLJ"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <!-- Top Navigation Bar -->
-    <header class="navbar-wrapper">
-        <div class="top-bar">
-            <div class="container top-bar-container">
-                <div class="top-bar-left">
-                    <span class="top-bar-item"><i class="fa-solid fa-phone"></i> <a href="tel:+916374191927">+91 6374191927</a></span>
-                    <span class="top-bar-item"><i class="fa-solid fa-envelope"></i> <a href="mailto:info@jouleassetvaluers.com">info@jouleassetvaluers.com</a></span>
-                    <span class="top-bar-item"><i class="fa-solid fa-location-dot"></i> Chennai | Bengaluru | Kochi | Tuticorin</span>
-                </div>
-                <div class="top-bar-right">
-                    <div class="top-social">
-                        <a href="https://www.linkedin.com" target="_blank" rel="noopener" class="top-social-link" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://www.youtube.com" target="_blank" rel="noopener" class="top-social-link" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <nav class="navbar">
-            <div class="container nav-container">
-                <a href="index.html" class="nav-brand" aria-label="Joule Asset Valuers Home">
-                    <img src="logo.png" alt="Joule Asset Valuers Logo" class="brand-logo" width="180" height="48">
-                </a>
-                <div class="nav-links">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="about.html" class="nav-link">About Us</a>
-                    <div class="nav-item-dropdown">
-                        <a href="services.html" class="nav-link dropdown-toggle">Services <i class="fa-solid fa-angle-down"></i></a>
-                        <div class="dropdown-menu">
-                            <a href="chartered-engineer-service-for-customs.html" class="dropdown-item">Chartered Engineer Customs</a>
-                            <a href="used-machinery-survey-valuation.html" class="dropdown-item">Used Machinery Survey &amp; Valuation</a>
-                            <a href="empty-container-inspection.html" class="dropdown-item">Empty Container Inspection</a>
-                            <a href="import-metal-scrap-radiation-testing.html" class="dropdown-item">Metal Scrap Radiation Testing</a>
-                            <a href="dredgers-vessel-survey-valuation.html" class="dropdown-item">Dredgers &amp; Vessel Survey</a>
-                            <a href="epcg-advance-authorisation-certificate.html" class="dropdown-item">EPCG / Advance Authorisation</a>
-                            <a href="installation-nexus-certificate.html" class="dropdown-item">Installation / Nexus Certificate</a>
-                            <a href="services.html" class="dropdown-item highlight-item">View All Services &rarr;</a>
-                        </div>
-                    </div>
-                    <a href="blog.html" class="nav-link active">Blog</a>
-                    <a href="contact.html" class="nav-link">Contact</a>
-                </div>
-                <div class="nav-actions">
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme">
-                        <i class="fa-solid fa-moon"></i>
-                    </button>
-                    <a href="contact.html" class="btn btn-primary nav-cta">Get A Quote</a>
-                    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Mobile Navigation Drawer -->
-    <div class="mobile-drawer" id="mobileDrawer">
-        <div class="mobile-drawer-header">
-            <a href="index.html" class="nav-brand">
-                <img src="logo.png" alt="Joule Asset Valuers" width="160" height="42">
+    <!-- Main Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Joule Asset Valuers - Registered Chartered Engineers & Plant Machinery Valuers in Chennai, India" title="Joule Asset Valuers | Chartered Engineer & Industrial Valuation Services" width="240" height="80" style="height: 88px; width: auto; max-height: 92px; display: block;" loading="eager" fetchpriority="high" decoding="async">
             </a>
-            <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close menu">&times;</button>
+            
+            <div class="mobile-nav-actions">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link ">Home</a></li>
+                <li><a href="about.html" class="nav-link ">About Us</a></li>
+                <li><a href="services.html" class="nav-link ">Services</a></li>
+                <li><a href="blog.html" class="nav-link active">Blog</a></li>
+                <li><a href="contact.html" class="nav-link ">Contact Us</a></li>
+                <li class="nav-cta"><a href="contact.html" class="btn btn-accent">Request a Consultation <i class="fa-solid fa-arrow-right"></i></a></li>
+            </ul>
         </div>
-        <ul class="mobile-nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="services.html">All Services</a></li>
-            <li><a href="empty-container-inspection.html">&mdash; Empty Container Inspection</a></li>
-            <li><a href="import-metal-scrap-radiation-testing.html">&mdash; Metal Scrap Radiation Testing</a></li>
-            <li><a href="dredgers-vessel-survey-valuation.html">&mdash; Dredgers &amp; Vessel Survey</a></li>
-            <li><a href="chartered-engineer-service-for-customs.html">&mdash; Customs CE Certification</a></li>
-            <li><a href="blog.html" class="active">Blog &amp; Technical Insights</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-        <div class="mobile-contact-info">
-            <p><i class="fa-solid fa-phone"></i> +91 6374191927</p>
-            <p><i class="fa-solid fa-envelope"></i> info@jouleassetvaluers.com</p>
-        </div>
-    </div>
+    </nav>
 
-    <!-- Breadcrumb Section -->
-    <div class="breadcrumb-bar" style="background: rgba(10, 25, 47, 0.95); padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-        <div class="container">
-            <ol class="breadcrumb" style="display: flex; gap: 8px; font-size: 0.85rem; color: #94a3b8; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; align-items: center;">
-                <li><a href="index.html" style="color: #cbd5e1; text-decoration: none;">Home</a></li>
-                <li><span style="color: #64748b;">/</span></li>
-                <li><a href="blog.html" style="color: #cbd5e1; text-decoration: none;">Blog &amp; Insights</a></li>
-                <li><span style="color: #64748b;">/</span></li>
-                <li style="color: var(--color-accent); font-weight: 600;">Empty Shipping Container Inspection</li>
-            </ol>
-        </div>
-    </div>
+    <section class="section">
+        <div class="blog-inner-container">
+        <div class="blog-inner-layout">
 
-    <!-- MAIN BLOG SECTION (Dual-Sidebar Layout) -->
-    <section class="blog-detail-section" style="padding: 40px 0 80px;">
-        <div class="container">
-            <div class="blog-inner-layout">
+        <!-- LEFT SIDEBAR: Sticky Authority & Regional Hubs -->
+        <aside class="blog-sidebar-left">
+            <!-- Guide Sections TOC -->
+            <div class="blog-nav-card">
+                <h4 class="blog-nav-card-title"><i class="fa-solid fa-list-check"></i> Guide Sections</h4>
+                <ul class="nav-articles-menu" style="font-size: 0.85rem;">
+                    <li><a href="#introduction"><i class="fa-solid fa-angle-right"></i> Introduction</a></li>
+                    <li><a href="#what-is-inspection"><i class="fa-solid fa-angle-right"></i> What Is Inspection?</a></li>
+                    <li><a href="#why-inspection-important"><i class="fa-solid fa-angle-right"></i> Why Inspect Before Loading?</a></li>
+                    <li><a href="#inspection-checklist"><i class="fa-solid fa-angle-right"></i> 8-Point Checklist</a></li>
+                    <li><a href="#common-defects"><i class="fa-solid fa-angle-right"></i> Common Defects Table</a></li>
+                    <li><a href="#container-types"><i class="fa-solid fa-angle-right"></i> Container Types Checked</a></li>
+                    <li><a href="#inspection-process"><i class="fa-solid fa-angle-right"></i> 6-Step Inspection Process</a></li>
+                    <li><a href="#documents-required"><i class="fa-solid fa-angle-right"></i> Documents Required</a></li>
+                    <li><a href="#chennai-services"><i class="fa-solid fa-angle-right"></i> Survey in Chennai</a></li>
+                    <li><a href="#how-to-choose"><i class="fa-solid fa-angle-right"></i> Choosing a Service Provider</a></li>
+                    <li><a href="#regulatory-references"><i class="fa-solid fa-angle-right"></i> Statutory References</a></li>
+                    <li><a href="#faq-section"><i class="fa-solid fa-angle-right"></i> FAQs</a></li>
+                    <li><a href="#quote-form"><i class="fa-solid fa-angle-right"></i> Request Inspection Quote</a></li>
+                </ul>
+            </div>
 
-                <!-- LEFT SIDEBAR: Sticky Table of Contents & Quick Navigation -->
-                <aside class="blog-sidebar-left">
-                    <div class="blog-nav-card">
-                        <h4 class="blog-nav-card-title"><i class="fa-solid fa-list-check"></i> Guide Sections</h4>
-                        <ul class="blog-toc-list">
-                            <li><a href="#introduction"><span class="blog-toc-num">01.</span> Introduction</a></li>
-                            <li><a href="#what-is-inspection"><span class="blog-toc-num">02.</span> What Is Container Inspection?</a></li>
-                            <li><a href="#why-inspection-important"><span class="blog-toc-num">03.</span> Why Inspect Before Loading?</a></li>
-                            <li><a href="#inspection-checklist"><span class="blog-toc-num">04.</span> 8-Point Inspection Checklist</a></li>
-                            <li><a href="#common-defects"><span class="blog-toc-num">05.</span> Common Defects Table</a></li>
-                            <li><a href="#container-types"><span class="blog-toc-num">06.</span> Container Types Checked</a></li>
-                            <li><a href="#inspection-process"><span class="blog-toc-num">07.</span> 6-Step Inspection Process</a></li>
-                            <li><a href="#documents-required"><span class="blog-toc-num">08.</span> Documents Required</a></li>
-                            <li><a href="#chennai-services"><span class="blog-toc-num">09.</span> Container Survey in Chennai</a></li>
-                            <li><a href="#how-to-choose"><span class="blog-toc-num">10.</span> Choosing a Service Provider</a></li>
-                            <li><a href="#regulatory-references"><span class="blog-toc-num">11.</span> Statutory References</a></li>
-                            <li><a href="#faq-section"><span class="blog-toc-num">12.</span> Frequently Asked Questions</a></li>
-                            <li><a href="#quote-form"><span class="blog-toc-num">13.</span> Request Inspection Quote</a></li>
-                        </ul>
+            <!-- Technical Articles Menu (All 17 Posts) -->
+            <div class="blog-nav-card">
+                <h4 class="blog-nav-card-title"><i class="fa-solid fa-newspaper"></i> Technical Articles</h4>
+                <ul class="nav-articles-menu">
+                    <li><a href="empty-shipping-container-inspection-checklist-common-defects.html" class="active">Empty Container Inspection Guide</a></li>
+                    <li><a href="metal-scrap-radiation-testing-import-india.html">Metal Scrap Radiation Testing Services</a></li>
+                    <li><a href="dredger-vessel-valuation-services-chennai.html">Dredger &amp; Vessel Valuation Chennai</a></li>
+                    <li><a href="what-does-industrial-machinery-inspection-report-include.html">Machinery Inspection Report Guide</a></li>
+                    <li><a href="how-to-assess-remaining-useful-life-industrial-equipment.html">Remaining Useful Life of Industrial Equipment</a></li>
+                    <li><a href="industrial-machinery-insurance-survey-chennai.html">Industrial Machinery Insurance Survey Chennai</a></li>
+                    <li><a href="factory-plant-stability-certificate-chennai.html">Factory Stability Certificate Chennai</a></li>
+                    <li><a href="machinery-installation-certificate-vs-nexus-certificate.html">Machinery Installation vs Nexus Certificate</a></li>
+                    <li><a href="epcg-scheme-documentation-mistakes-importers-avoid.html">EPCG Documentation Mistakes Importers Avoid</a></li>
+                    <li><a href="customs-value-used-machinery-calculated-india.html">Customs Value of Used Machinery in India</a></li>
+                    <li><a href="used-machinery-valuation-factors.html">Used Industrial Machinery Valuation Factors</a></li>
+                    <li><a href="marine-asset-valuation-dredger-vessel.html">Marine Asset Valuation: Dredgers &amp; Vessels</a></li>
+                    <li><a href="plant-machinery-valuation-services-chennai.html">Plant &amp; Machinery Valuation Chennai</a></li>
+                    <li><a href="epcg-machinery-installation-certificate.html">EPCG Installation Certificate Services</a></li>
+                    <li><a href="used-machinery-valuation-services-chennai.html">Used Machinery Valuation for Importers</a></li>
+                    <li><a href="chartered-engineer-certificate-customs-chennai.html">CE Certificate for Chennai Customs</a></li>
+                    <li><a href="chartered-engineer-certificate-customs-india.html">CE Certificate for Indian Customs</a></li>
+                </ul>
+            </div>
+
+            <!-- Regional Engineering Hubs (4 Locations) -->
+            <div class="blog-nav-card">
+                <h4 class="blog-nav-card-title"><i class="fa-solid fa-location-dot"></i> Regional Hubs</h4>
+                <ul class="nav-locations-menu">
+                    <li><a href="chartered-engineer-in-chennai.html"><i class="fa-solid fa-city"></i> Chartered Engineer in Chennai</a></li>
+                    <li><a href="chartered-engineer-in-bangalore.html"><i class="fa-solid fa-microchip"></i> Chartered Engineer in Bangalore</a></li>
+                    <li><a href="chartered-engineer-in-kochi.html"><i class="fa-solid fa-ship"></i> Chartered Engineer in Kochi</a></li>
+                    <li><a href="chartered-engineer-in-tuticorin.html"><i class="fa-solid fa-anchor"></i> Chartered Engineer in Tuticorin</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- CENTER MAIN ARTICLE -->
+        <main class="blog-main-content">
+            <article class="blog-large-card reveal" style="box-shadow: none; border: none; background: transparent;">
+                <div class="blog-large-image">
+                    <img src="blog-empty-shipping-container-inspection.jpg?v=20261123_v162" 
+                         srcset="blog-empty-shipping-container-inspection.jpg?v=20261123_v162 1024w" 
+                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 840px" 
+                         alt="Empty Shipping Container Inspection: Checklist and Common Defects - Joule Asset Valuers" 
+                         title="Empty Shipping Container Inspection: Checklist and Defects | Joule Asset Valuers" 
+                         width="1024" height="576" loading="eager" fetchpriority="high" decoding="async" style="width: 100%; height: auto; display: block; border-radius: 8px;">
+                </div>
+                <div class="blog-large-body" style="padding: 30px 0;">
+                    <!-- Breadcrumbs (SEO UX) -->
+                    <nav class="blog-breadcrumb" aria-label="Breadcrumb" style="margin-bottom: 16px;">
+                        <ol style="list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; font-size: 0.88rem; color: #94a3b8;">
+                            <li><a href="index.html" style="color: #cbd5e1; text-decoration: none;"><i class="fa-solid fa-house"></i> Home</a></li>
+                            <li><span style="color: #64748b;">/</span></li>
+                            <li><a href="blog.html" style="color: #cbd5e1; text-decoration: none;">Blog</a></li>
+                            <li><span style="color: #64748b;">/</span></li>
+                            <li style="color: #facc15; font-weight: 500;">Empty Shipping Container Inspection</li>
+                        </ol>
+                    </nav>
+
+                    <div class="blog-meta" style="margin-bottom: 24px;">
+                        <span class="blog-meta-item"><i class="fa-regular fa-user"></i> by <a href="index.html" style="color: inherit; text-decoration: underline;">Joule Asset Valuers</a></span>
+                        <span class="blog-meta-item"><i class="fa-regular fa-calendar"></i> November 23, 2026</span>
+                        <span class="blog-meta-item"><i class="fa-regular fa-clock"></i> 9 min read</span>
+                        <span class="blog-meta-item"><i class="fa-solid fa-tags"></i> Container Survey &amp; Cargo Safety</span>
                     </div>
 
-                    <div class="blog-nav-card">
-                        <h4 class="blog-nav-card-title"><i class="fa-solid fa-newspaper"></i> Technical Guides</h4>
-                        <ul class="nav-articles-menu">
-                            <li><a href="metal-scrap-radiation-testing-import-india.html"><i class="fa-solid fa-chevron-right"></i> Metal Scrap Radiation Testing</a></li>
-                            <li><a href="dredger-vessel-valuation-services-chennai.html"><i class="fa-solid fa-chevron-right"></i> Dredger &amp; Vessel Valuation Chennai</a></li>
-                            <li><a href="marine-asset-valuation-dredger-vessel.html"><i class="fa-solid fa-chevron-right"></i> Marine Vessel Valuation Guide</a></li>
-                            <li><a href="what-does-industrial-machinery-inspection-report-include.html"><i class="fa-solid fa-chevron-right"></i> Machinery Inspection Report Guide</a></li>
-                            <li><a href="how-to-assess-remaining-useful-life-industrial-equipment.html"><i class="fa-solid fa-chevron-right"></i> Remaining Useful Life (RUL) Guide</a></li>
-                            <li><a href="customs-value-used-machinery-calculated-india.html"><i class="fa-solid fa-chevron-right"></i> Customs Value Calculation</a></li>
-                            <li><a href="chartered-engineer-certificate-customs-chennai.html"><i class="fa-solid fa-chevron-right"></i> CE Certificate Chennai Customs</a></li>
-                        </ul>
-                    </div>
-                </aside>
+                    <h1 class="blog-single-title">Empty Shipping Container Inspection: Checklist and Common Defects</h1>
 
-                <!-- CENTER COLUMN: Scrolling Blog Content -->
-                <main class="blog-content-center">
-                    <article class="blog-article-wrap">
-                        <!-- Blog Header -->
-                        <header class="blog-article-header" style="margin-bottom: 24px;">
-                            <span class="blog-tag-badge" style="background: rgba(250, 204, 21, 0.15); color: #facc15; padding: 4px 12px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid rgba(250, 204, 21, 0.3);">Marine &amp; Cargo Inspection Guide</span>
-                            <h1 style="font-size: 2.2rem; line-height: 1.25; color: #ffffff; margin-top: 14px; margin-bottom: 16px; font-weight: 800;">Empty Shipping Container Inspection: Checklist and Common Defects</h1>
-                            <div class="blog-meta-bar" style="display: flex; gap: 18px; color: #94a3b8; font-size: 0.88rem; flex-wrap: wrap; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 14px;">
-                                <span><i class="fa-solid fa-calendar-days" style="color: var(--color-accent); margin-right: 6px;"></i> November 23, 2026</span>
-                                <span><i class="fa-solid fa-user-pen" style="color: var(--color-accent); margin-right: 6px;"></i> Balamurugan P, Chartered Engineer</span>
-                                <span><i class="fa-solid fa-clock" style="color: var(--color-accent); margin-right: 6px;"></i> 9 min read</span>
-                                <span><i class="fa-solid fa-tags" style="color: var(--color-accent); margin-right: 6px;"></i> Container Survey &amp; Cargo Safety</span>
-                            </div>
-                        </header>
-
-                        <!-- Featured Banner Image -->
-                        <div class="blog-banner-container" style="border-radius: 12px; overflow: hidden; margin-bottom: 32px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);">
-                            <img src="blog-empty-shipping-container-inspection.jpg" alt="Empty Shipping Container Inspection: Checklist and Common Defects - Joule Asset Valuers" width="1024" height="576" style="width: 100%; height: auto; display: block;" loading="eager">
-                        </div>
-
-                        <!-- Content Body -->
-                        <div class="blog-article-content" style="color: #cbd5e1; font-size: 1rem; line-height: 1.75;">
-
-                            <!-- Section 1: Introduction -->
+                    <div class="blog-single-content" style="line-height: 1.8; font-size: 1.05rem;">
+                        <!-- Section 1: Introduction -->
                             <div id="introduction">
                                 <h2 style="color: #ffffff; font-size: 1.5rem; margin-top: 24px; margin-bottom: 16px;"><i class="fa-solid fa-ship" style="color: var(--color-accent); margin-right: 10px;"></i>Introduction</h2>
                                 <p>Shipping containers play an indispensable role in international trade, multi-modal transportation, import logistics, and industrial supply chains. Every day, thousands of TEUs (Twenty-foot Equivalent Units) carry high-value manufactured goods, bulk commodities, industrial machinery, and perishable cargo across oceanic routes, container freight stations (CFS), inland container depots (ICD), and port terminals.</p>
@@ -1091,51 +1071,51 @@
                             <div class="regulatory-disclaimer-box" style="margin-top: 30px; padding: 18px 22px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; font-size: 0.88rem; color: #94a3b8; line-height: 1.6;">
                                 <p style="margin: 0;"><strong style="color: #facc15;"><i class="fa-solid fa-circle-info"></i> Disclaimer:</strong> The inspection scope, acceptance criteria, and report requirements depend on the container type, intended use, applicable standards, and customer or shipping line requirements. A general visual inspection does not constitute statutory CSC re-certification or a blanket guarantee of container seaworthiness.</p>
                             </div>
-
-                        </div>
-                    </article>
-                </main>
-
-                <!-- RIGHT SIDEBAR: Sticky Services & Quick CTA -->
-                <aside class="blog-sidebar-right">
-                    <!-- Our Services Menu -->
-                    <div class="blog-nav-card">
-                        <h4 class="blog-nav-card-title"><i class="fa-solid fa-screwdriver-wrench"></i> Our Services</h4>
-                        <ul class="nav-services-menu">
-                            <li><a href="empty-container-inspection.html" class="active"><i class="fa-solid fa-play"></i> Empty Container Inspection</a></li>
-                            <li><a href="ucc-disposal-cargo-certification.html"><i class="fa-solid fa-play"></i> UCC / Disposal Cargo Cert.</a></li>
-                            <li><a href="dredgers-vessel-survey-valuation.html"><i class="fa-solid fa-play"></i> Dredger &amp; Vessel Survey</a></li>
-                            <li><a href="chartered-engineer-service-for-customs.html"><i class="fa-solid fa-play"></i> Customs CE Certification</a></li>
-                            <li><a href="chartered-engineer-certificate-customs-chennai.html"><i class="fa-solid fa-play"></i> CE Certificate Chennai Customs</a></li>
-                            <li><a href="chartered-engineer-certificate-customs-india.html"><i class="fa-solid fa-play"></i> CE Certificate All India Customs</a></li>
-                            <li><a href="import-metal-scrap-radiation-testing.html"><i class="fa-solid fa-play"></i> Metal Scrap Radiation Testing</a></li>
-                            <li><a href="plant-machinery-valuation-services-chennai.html"><i class="fa-solid fa-play"></i> Plant &amp; Machinery Valuation</a></li>
-                            <li><a href="used-machinery-survey-valuation.html"><i class="fa-solid fa-play"></i> Used Machinery Valuation</a></li>
-                            <li><a href="epcg-advance-authorisation-certificate.html"><i class="fa-solid fa-play"></i> EPCG / Advance Authorisation</a></li>
-                            <li><a href="installation-nexus-certificate.html"><i class="fa-solid fa-play"></i> Installation &amp; Nexus Certificate</a></li>
-                            <li><a href="factory-plants-stability-certificates.html"><i class="fa-solid fa-play"></i> Factory Stability Certificate</a></li>
-                        </ul>
                     </div>
+                </div>
+            </article>
+        </main>
 
-                    <!-- Quick Contact / Advisory CTA Card -->
-                    <div class="blog-nav-card blog-cta-card" style="background: linear-gradient(145deg, rgba(250, 204, 21, 0.12) 0%, rgba(13, 30, 54, 0.95) 100%); border: 1.5px solid rgba(250, 204, 21, 0.35);">
-                        <h4 style="color: #facc15; font-size: 1.05rem; margin-bottom: 8px;"><i class="fa-solid fa-headset"></i> Need Container Survey?</h4>
-                        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 14px; line-height: 1.5;">Speak directly with our empanelled Chartered Engineers and container surveyors for rapid on-site inspection across Chennai port and CFS depots.</p>
-                        <a href="tel:+916374191927" class="btn btn-primary" style="display: block; text-align: center; padding: 10px; font-size: 0.88rem; width: 100%; box-sizing: border-box; margin-bottom: 8px;">
-                            <i class="fa-solid fa-phone"></i> +91 6374191927
-                        </a>
-                        <a href="#quote-form" class="btn btn-secondary" style="display: block; text-align: center; padding: 8px; font-size: 0.82rem; width: 100%; box-sizing: border-box;">
-                            <i class="fa-solid fa-envelope"></i> Request Online Quote
-                        </a>
-                    </div>
-                </aside>
-
+        <!-- RIGHT SIDEBAR: Sticky Services & Quick CTA -->
+        <aside class="blog-sidebar-right">
+            <!-- Our Services Menu -->
+            <div class="blog-nav-card">
+                <h4 class="blog-nav-card-title"><i class="fa-solid fa-screwdriver-wrench"></i> Our Services</h4>
+                <ul class="nav-services-menu">
+                    <li><a href="empty-container-inspection.html" class="active"><i class="fa-solid fa-play"></i> Empty Container Inspection</a></li>
+                    <li><a href="import-metal-scrap-radiation-testing.html"><i class="fa-solid fa-play"></i> Metal Scrap Radiation Testing</a></li>
+                    <li><a href="dredgers-vessel-survey-valuation.html"><i class="fa-solid fa-play"></i> Dredger &amp; Vessel Survey</a></li>
+                    <li><a href="ucc-disposal-cargo-certification.html"><i class="fa-solid fa-play"></i> UCC / Disposal Cargo Cert.</a></li>
+                    <li><a href="chartered-engineer-service-for-customs.html"><i class="fa-solid fa-play"></i> Customs CE Certification</a></li>
+                    <li><a href="chartered-engineer-certificate-customs-chennai.html"><i class="fa-solid fa-play"></i> CE Certificate Chennai Customs</a></li>
+                    <li><a href="chartered-engineer-certificate-customs-india.html"><i class="fa-solid fa-play"></i> CE Certificate All India Customs</a></li>
+                    <li><a href="plant-machinery-valuation-services-chennai.html"><i class="fa-solid fa-play"></i> Plant &amp; Machinery Valuation</a></li>
+                    <li><a href="used-machinery-valuation-services-chennai.html"><i class="fa-solid fa-play"></i> Used Machinery Valuation Chennai</a></li>
+                    <li><a href="epcg-machinery-installation-certificate.html"><i class="fa-solid fa-play"></i> EPCG Installation Certificate</a></li>
+                    <li><a href="installation-nexus-certificate.html"><i class="fa-solid fa-play"></i> Installation &amp; Nexus Certificate</a></li>
+                    <li><a href="factory-plants-stability-certificates.html"><i class="fa-solid fa-play"></i> Factory Stability Certificate</a></li>
+                </ul>
             </div>
+
+            <!-- Quick Contact / Advisory CTA Card -->
+            <div class="blog-nav-card blog-cta-card" style="background: linear-gradient(145deg, rgba(250, 204, 21, 0.12) 0%, rgba(13, 30, 54, 0.95) 100%); border: 1.5px solid rgba(250, 204, 21, 0.35);">
+                <h4 style="color: #facc15; font-size: 1.05rem; margin-bottom: 8px;"><i class="fa-solid fa-headset"></i> Need Container Survey?</h4>
+                <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 14px; line-height: 1.5;">Speak directly with our empanelled Chartered Engineers and container surveyors for rapid on-site inspection across Chennai port and CFS depots.</p>
+                <a href="tel:+916374191927" class="btn btn-primary" style="display: block; text-align: center; padding: 10px; font-size: 0.88rem; width: 100%; box-sizing: border-box; margin-bottom: 8px;">
+                    <i class="fa-solid fa-phone"></i> +91 6374191927
+                </a>
+                <a href="#quote-form" class="btn btn-secondary" style="display: block; text-align: center; padding: 8px; font-size: 0.82rem; width: 100%; box-sizing: border-box;">
+                    <i class="fa-solid fa-envelope"></i> Request Online Quote
+                </a>
+            </div>
+        </aside>
+
+        </div>
         </div>
     </section>
 
-    <!-- Master Footer -->
-        <footer class="footer-v2">
+    <!-- Footer -->
+    <footer class="footer-v2">
         <div class="footer-video-wrapper">
             <video class="footer-bg-video footer-bg-video-desktop" preload="none" autoplay loop muted playsinline poster="footer-bg.jpg" title="Joule Asset Valuers - International Maritime Shipping and Container Port Cargo Operations" aria-label="Container port cargo ship logistics and industrial freight handling video - Joule Asset Valuers">
                 <source data-src="Cargo_ships_at_container_port_202609042159.mp4" type="video/mp4">
@@ -1250,6 +1230,8 @@
 
     <!-- Script File -->
     <script src="script.js?v=20261119_v137"></script>
+
+    <!-- Floating Action Buttons -->
     <!-- Floating Action Buttons -->
     <a href="https://wa.me/916374191927?text=Hello%20Joule%20Asset%20Valuers,%20I%20would%20like%20to%20inquire%20about%20your%20services." class="float-action-btn float-whatsapp" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
         <i class="fa-brands fa-whatsapp"></i>
