@@ -13,7 +13,8 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-# Disallow internal scripts, source assets, and build artifacts from crawl budget waste
+# Disallow conversion thank-you pages, internal scripts, and build artifacts
+Disallow: /thank-you.html
 Disallow: /*.json$
 Disallow: /*.mp4$
 Disallow: /node_modules/
