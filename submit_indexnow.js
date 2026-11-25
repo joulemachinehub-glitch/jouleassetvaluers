@@ -1,11 +1,13 @@
 ﻿const https = require('https');
 const fs = require('fs');
+const path = require('path');
 
 const key = '8e9f2a7b1c3d4e5f6a0b9c8d7e6f5a4b';
 const host = 'jouleassetvaluers.com';
 const keyLocation = `https://${host}/${key}.txt`;
 
-const xmlContent = fs.readFileSync('D:/Sakthi/New/sitemap.xml', 'utf8');
+const sitemapPath = path.join(__dirname, 'sitemap.xml');
+const xmlContent = fs.readFileSync(sitemapPath, 'utf8');
 const urlMatches = Array.from(xmlContent.matchAll(/<loc>([^<]+)<\/loc>/g)).map(m => m[1]);
 
 const payload = JSON.stringify({
