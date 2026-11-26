@@ -155,8 +155,14 @@
     </url>
 
     <!-- =================================================== -->
-    <!-- Technical Blog Articles & Regulatory Guides (19 Articles) -->
+    <!-- Technical Blog Articles & Regulatory Guides (20 Articles) -->
     <!-- =================================================== -->
+    <url>
+        <loc>https://jouleassetvaluers.com/how-to-prepare-industrial-machinery-valuation-report.html</loc>
+        <lastmod>2026-11-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
     <url>
         <loc>https://jouleassetvaluers.com/chartered-engineer-certificate-advance-authorisation-chennai.html</loc>
         <lastmod>2026-11-26</lastmod>
