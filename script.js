@@ -794,6 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const otherAnswer = item.querySelector('.faq-answer, .blog-faq-answer');
                         if (otherAnswer) {
                             otherAnswer.style.maxHeight = null;
+                            otherAnswer.style.display = 'none';
                         }
                     }
                 });
